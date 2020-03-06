@@ -1,0 +1,70 @@
+body {
+  margin: 10px;
+  * {
+    display: block;
+  }
+}
+.selected {
+  background-color: #fcc;
+}
+TOC {
+  display: none
+}
+@mixin flex-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  &Title {
+    margin-right: 1rem;
+    break-after: avoid-column;
+  }
+  &Sentence {
+    break-after: column;
+  }
+}
+@mixin section($color) {
+  border-left: solid 4px $color;
+  margin-bottom: 1rem;
+  padding-left: 6px;
+}
+LawTitle {
+  font-size: 2.5em;
+  border-bottom: dotted black 3px;
+}
+Part {
+  @include section(red);
+  &Title {
+    font-size: 2rem;
+  }
+}
+Chapter {
+  @include section(blue);
+  &Title {
+    font-size: 1.5rem;
+  }
+}
+Article {
+  @include section(aqua);
+}
+Paragraph, Item, SubItem1 {
+  @include flex-container;
+}
+Paragraph {
+  @include section(green);
+}
+Item {
+  @include section(pink);
+}
+SubItem1 {
+  @include section(gray);
+}
+Column {
+  display: block;
+}
+Sentence {
+  display: inline;
+}
+Ruby {
+  display: inline;
+}

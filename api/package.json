@@ -1,0 +1,19 @@
+{
+  "name": "elaws",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/legal-tech/elaws",
+  "author": "@kuboon",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@now/node": "^1.4.1",
+    "ts-jest": "^25.2.1",
+    "ts-lint": "^4.5.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^3.16.0",
+    "pug": "^2.0.4"
+  }
+}

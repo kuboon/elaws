@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "cd api; yarn jest",
+    "build": "parcel build src/index.pug src/style.scss src/script.js src/favicon.ico -d public"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "pug-cli": "^1.0.0-alpha6",
+    "sass": "^1.26.2"
+  }
+}

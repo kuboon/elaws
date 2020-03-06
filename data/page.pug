@@ -1,0 +1,10 @@
+doctype html
+html(lang="ja")
+  head
+    link(rel="stylesheet" href="/style.css")
+    script(defer src="/script.js")
+    title= title + "- 日本法令引用 URL"
+  body
+    div= JSON.stringify(sentence)
+    != xml 
+    
