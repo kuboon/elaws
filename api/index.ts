@@ -11,7 +11,8 @@ function xmlClose(xml: string) {
   return xml.replace(/<(.+)\/>/g, "<$1></$1>")
 };
 function selectByPath(json, pathname){
-  const path = pathname.split("/").slice(-1)[0]
+  const path = pathname.split("/")[2]
+  if(!path || path == "") return
   let cursor = json
   path.split("-").forEach((v, i) => {
     const name = blockElems[i]
@@ -41,8 +42,9 @@ export default async function(req: NowRequest, res: NowResponse) {
   const json = xmlParse.parse(xml, {ignoreAttributes: false, arrayMode: "strict"}).Law[0].LawBody[0]
   const title = json.LawTitle[0]
   const main = json.MainProvision[0]
+  console.log(url.pathname)
   const target = selectByPath(main, url.pathname)
-  const sentence = getSentence("", target)
-  console.log(sentence)
+  const sentence = target ? getSentence("", target) : ""
+  res.setHeader('Cache-Control', 's-maxage=3, stale-while-revalidate')
   res.send(page({xml: xmlClose(xml), title, sentence}))
 }

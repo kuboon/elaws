@@ -26,7 +26,7 @@ function pathToElem(path){
 function onClick(ev){
   const loc = elemToLocation(ev.target)
   const path = locationToPath(loc)
-  history.pushState(null, path, "/" + path)
+  history.pushState(null, path, "/%E4%BC%9A%E7%A4%BE%E6%B3%95/" + path)
   select(pathToElem(path))
 }
 function select(el){
