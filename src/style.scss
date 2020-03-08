@@ -1,13 +1,13 @@
 body {
   margin: 10px;
-  Law * {
-    display: block;
-  }
 }
 .selected {
   background-color: #fcc;
 }
-TOC {
+Law * {
+  display: block;
+}
+Result, ApplData>LawNum, TOC {
   display: none
 }
 @mixin flex-container {
