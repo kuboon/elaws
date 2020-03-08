@@ -2,7 +2,10 @@
   "version": 2,
   "env": {},
   "functions": {
-    "api/index.ts": {
+    "api/list.ts": {
+      "includeFiles": "data/**"
+    },
+    "api/page.ts": {
       "includeFiles": "data/**"
     }
   },
@@ -10,6 +13,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/%E4%BC%9A%E7%A4%BE%E6%B3%95(.*)", "destination": "/api/index" }
+    { "source": "/(.+)", "destination": "/api/page" }
   ]
 }

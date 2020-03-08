@@ -1,4 +1,13 @@
-html
-head
-  link(rel="stylesheet" href="style.scss")
-a(href="/%E4%BC%9A%E7%A4%BE%E6%B3%95") 会社法
+- const siteTitle = "日本法令引用 URL"
+- const description = "クリックで選択してかんたんシェア"
+doctype html
+html(lang="ja")
+  head
+    link(rel="stylesheet" href="/style.scss")
+    script(defer src="/index.tsx")
+    title= siteTitle
+    meta(property="og:title" content=siteTitle)
+    meta(property="og:description" content=description)
+    meta(property="og:image" content=`https://og.kbn.one/%23%20${siteTitle}%0A${description}.png?md=1`)
+  body
+  

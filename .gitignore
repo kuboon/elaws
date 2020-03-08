@@ -2,3 +2,5 @@ node_modules
 public
 .cache
 .now
+
+yarn-error.log

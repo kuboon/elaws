@@ -3,11 +3,31 @@
   "license": "MIT",
   "scripts": {
     "test": "cd api; yarn jest",
-    "build": "parcel build src/index.pug src/style.scss src/script.js src/favicon.ico -d public"
+    "build": "rm -r public; parcel build src/index.pug src/style.scss src/page.js src/favicon.ico -d public"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-preact": "^2.0.0",
     "parcel-bundler": "^1.12.4",
+    "preact": "^10.3.3",
     "pug-cli": "^1.0.0-alpha6",
-    "sass": "^1.26.2"
+    "sass": "^1.26.2",
+    "typescript": "^3.8.3"
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom/test-utils": "preact/test-utils",
+    "react-dom": "preact/compat"
+  },
+  "babel": {
+    "presets": [
+      "es2017",
+      "preact"
+    ],
+    "plugins": []
+  },
+  "dependencies": {
+    "use-debounce": "^3.3.0"
   }
 }
