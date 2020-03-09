@@ -6,7 +6,10 @@ html(lang="ja")
     title= title + "- 日本法令引用 URL"
     meta(property="og:title" content=title)
     meta(property="og:description" content=sentence)
+    meta(property="og:url" content=url)
     meta(property="og:image" content=`https://og.kbn.one/%23%20${title}%0A${sentence}.png?md=1`)
+    meta(property="og:image:width" content="833")
+    meta(property="og:image:height" content="476")
   body
     #source
       a(href=source) 原本へのリンク
