@@ -1,5 +1,28 @@
+@supports (font: -apple-system-body) {
+  html {
+    font: -apple-system-body;
+  }
+}
+@font-face {
+    font-family: minmoji;
+    src: url('https://minmoji.ucda.jp/fontseot/https%3A__elaws.kbn.one');
+    src: local('minmoji'),
+        url('https://minmoji.ucda.jp/fontswoff/https%3A__elaws.kbn.one') format('woff'),
+        url('https://minmoji.ucda.jp/fonts/https%3A__elaws.kbn.one') format('opentype');
+}
+
 body {
+  font-family: minmoji;
+  line-height: 1.6;
   margin: 10px;
+}
+.collapse {
+  &::after {
+    content: " [+]";
+  }
+  ~ * {
+    display: none;
+  }
 }
 .selected {
   background-color: #fcc;
@@ -10,6 +33,7 @@ Law * {
 Result, ApplData>LawNum, TOC {
   display: none
 }
+$part-color: hsl(0, 50%, 50%);
 @mixin flex-container {
   margin-top: 1rem;
   display: flex;
@@ -33,31 +57,31 @@ LawTitle {
   border-bottom: dotted black 3px;
 }
 Part {
-  @include section(red);
+  @include section($part-color);
   &Title {
     font-size: 2rem;
   }
 }
 Chapter {
-  @include section(blue);
+  @include section(adjust-hue($part-color, 30degrees));
   &Title {
     font-size: 1.5rem;
   }
 }
 Article {
-  @include section(aqua);
+  @include section(adjust-hue($part-color, 60degrees));
 }
 Paragraph, Item, SubItem1 {
   @include flex-container;
 }
 Paragraph {
-  @include section(green);
+  @include section(adjust-hue($part-color, 90degrees));
 }
 Item {
-  @include section(pink);
+  @include section(adjust-hue($part-color, 120degrees));
 }
 SubItem1 {
-  @include section(gray);
+  @include section(adjust-hue($part-color, 150degrees));
 }
 Column {
   display: block;

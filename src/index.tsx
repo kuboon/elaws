@@ -11,12 +11,13 @@ const App = ({ children, ...props }) => {
     <h1>{document.title}</h1>
     絞り込み検索 <input type="text" onChange={e => setText(e.target.value)}/>
     <ul class="list">
-    {props.list.filter(i => i.PromulgationDate.toString().includes(value) || i.LawName.includes(value)).map(i => (
-      <li>
-        <a href={i.LawNo}>
-          {i.PromulgationDate}: {i.LawName}
-        </a></li>
-    ))}
+    {props.list.filter(i => i.PromulgationDate.toString().includes(value) || i.LawName.includes(value)).map(i => {
+      const value = `${i.PromulgationDate}: ${i.LawName}`
+      return (
+      <li value={value}>
+        <a href={i.LawNo}>{value}</a>
+      </li>)
+    })}
     </ul>
     </Fragment>
   );
@@ -24,5 +25,5 @@ const App = ({ children, ...props }) => {
 
 window.addEventListener("load", async () => {
   const json = await fetch("/api/list").then(r=>r.json())
-  render(<App list={json.reverse()}/>, document.body);
+  render(<App list={json.reverse()}/>, document.getElementById('app'));
 })

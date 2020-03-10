@@ -42,7 +42,7 @@ export default async function(req: NowRequest, res: NowResponse) {
     const target = selectByPath(main, path)
     const sentence = target ? getSentence(target) : ""
     res.setHeader('Cache-Control', 's-maxage=3, stale-while-revalidate')
-    res.send(page({url: `https://elaws.kbn.one/${lawNum}/${path}`, source, xml: xmlClose(xml), title, sentence}))
+    res.send(page({url: `https://elaws.kbn.one/${lawNum}${path ? "/" + path : ""}`, source, xml: xmlClose(xml), title, sentence}))
   }catch(e){
     if(e != "PathNotFound") throw e;
     res.status(404)

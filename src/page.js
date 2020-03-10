@@ -1,4 +1,4 @@
-// const blockElems = ["Part", "Chapter", "Section", "Article", "Paragraph", "Item", "Subitem1"]
+const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"]
 const blockElems = ["Article", "Paragraph", "Item", "Subitem1"]
 function elemToPath(el){
   let ret = []
@@ -18,11 +18,25 @@ function pathToElem(path){
   })
   return document.querySelector(selectors.join(" "))
 }
+function getContainer(el){
+  let ret;
+  containerElems.reverse().find(n => {
+    const container = el.closest(n)
+    if (container) { ret = container; return true}
+  })
+  return ret;
+}
 function onClick(ev){
   const path = elemToPath(ev.target)
-  if(path == "") return
-  history.pushState(null, path, `/${document.location.pathname.split("/")[1]}/${path}`)
-  select(pathToElem(path))
+  if(path){
+    history.pushState(null, path, `/${document.location.pathname.split("/")[1]}/${path}`)
+    select(pathToElem(path))
+    return
+  }
+  const container = getContainer(ev.target)
+  if (container) {
+    container.classList.toggle('collapse')
+  }
 }
 function select(el){
   document.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"))
