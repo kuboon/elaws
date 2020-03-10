@@ -5,7 +5,7 @@ const J2x = xmlParse.j2xParser
 
 export default async function(req: NowRequest, res: NowResponse) {
   const xml = await got("https://elaws.e-gov.go.jp/api/1/lawlists/1")
-  const json = xmlParse.parse(xml).DataRoot.ApplData.LawNameListInfo
+  const json = xmlParse.parse(xml.body).DataRoot.ApplData.LawNameListInfo
   res.setHeader('Cache-Control', 's-maxage=3, stale-while-revalidate')
   res.setHeader('Content-Type', 'text/xml')
   const j2x = new J2x({
