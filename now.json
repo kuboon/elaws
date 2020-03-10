@@ -7,6 +7,9 @@
     },
     "api/page.ts": {
       "includeFiles": "data/**"
+    },
+    "api/sitemap.ts": {
+      "includeFiles": "data/index.xml"
     }
   },
   "regions": ["hnd1"],
