@@ -1,23 +1,40 @@
 import { h, render, Component, Fragment } from 'preact';
 import { useState } from 'preact/hooks';
-import { useDebounce } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 globalThis.h = h;
 
+const LongList = ({ children, list }) => {
+  const groups = {}
+  list.forEach(i => {
+    const year = String(i.PromulgationDate).slice(0,4)
+    if(!groups[year]) groups[year] = []
+    groups[year].push(i)
+  })
+  const onClick = ev => ev.target.classList.toggle('collapse')
+  return Object.keys(groups).reverse().map(k => 
+    <li>
+      <h2 class="collapse" onClick={onClick}>{k}</h2>
+      <ul><ShortList list={groups[k]}/></ul>
+    </li>
+  )
+)
+const ShortList = ({ children, list }) => (
+  list.map((i: any) => 
+    <li>
+      <a href={i.LawNo}>{i.PromulgationDate}: {i.LawName}</a>
+    </li>
+  )
+)
 const App = ({ children, ...props }) => {
   const [text, setText] = useState("");
-  const [value] = useDebounce(text, 1000);
+  const [textChanged] = useDebouncedCallback(setText, 1000);
+  const list = props.list.filter(i => i.PromulgationDate.toString().includes(text) || i.LawName.includes(text))
   return (
     <Fragment>
     <h1>{document.title}</h1>
-    絞り込み検索 <input type="text" onChange={e => setText(e.target.value)}/>
+    絞り込み検索 <input type="text" onChange={e => textChanged(e.target.value)}/>
     <ul class="list">
-    {props.list.filter(i => i.PromulgationDate.toString().includes(value) || i.LawName.includes(value)).map(i => {
-      const value = `${i.PromulgationDate}: ${i.LawName}`
-      return (
-      <li value={value}>
-        <a href={i.LawNo}>{value}</a>
-      </li>)
-    })}
+      {list.length > 100 ? <LongList list={list}/> : <ShortList list={list}/> }
     </ul>
     </Fragment>
   );
