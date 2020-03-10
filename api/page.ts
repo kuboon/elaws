@@ -20,11 +20,15 @@ function selectByPath(json, path){
     if(v=="0") return
     const name = blockElems[i]
     if(!name) throw "PathNotFound"
-    query += `..${name}[?(@.@_Num==${v})]`
+    query += `..${name}[?(@.@_Num=="${v}")]`
   })
-  const ret = jsonpath.query(json, query)
-  if(ret.length == 0) throw "PathNotFound"
-  return ret
+  try {
+    const ret = jsonpath.query(json, query)
+    if(ret.length == 0) throw "PathNotFound"
+    return ret
+  }catch(e){
+    console.error(query)
+  }
 };
 function getSentence(json){
   return jsonpath.query(json, "$.._text").join(" ").slice(0,100)
