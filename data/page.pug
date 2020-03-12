@@ -6,20 +6,20 @@ html(lang="ja")
     title= title + " - 日本法令引用 URL"
     meta(property="og:site_name" content="日本法令引用 URL")
     meta(property="og:title" content=title)
-    meta(property="og:description" content=sentence)
+    meta(property="og:description" content=description)
     meta(property="og:url" content=url)
-    meta(property="og:image" content=`https://og.kbn.one/%23%20${title}%0A${sentence}.png?md=1`)
+    meta(property="og:image" content=`https://og.kbn.one/%23%20${title}%0A${description}.png?md=1`)
     meta(property="og:image:width" content="833")
     meta(property="og:image:height" content="476")
     meta(name="twitter:card" content="summary")
     meta(name="twitter:title" content=title)
-    meta(name="twitter:description" content=sentence)
-    meta(name="twitter:image" content=`https://og.kbn.one/%23%20${title}%0A${sentence}.png?md=1`)
+    meta(name="twitter:description" content=description)
+    meta(name="twitter:image" content=`https://og.kbn.one/%23%20${title}%0A${description}.png?md=1`)
     meta(name="viewport" content="width=device-width, initial-scale: 1.0")
   body
     #source
       a(href=source) 原本へのリンク
-    != xml
+    xml#xml(xmlUrl=xmlUrl)!= xml
 
     <script type="text/javascript" src="https://minmoji.ucda.jp/sealjs/https%3A__elaws.kbn.one" charset="UTF-8"></script>
     

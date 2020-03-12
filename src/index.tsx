@@ -31,7 +31,6 @@ const App = ({ children, ...props }) => {
   const list = props.list.filter(i => i.PromulgationDate.toString().includes(text) || i.LawName.includes(text))
   return (
     <Fragment>
-    <h1>{document.title}</h1>
     絞り込み検索 <input type="text" onChange={e => textChanged(e.target.value)}/>
     <ul class="list">
       {list.length > 100 ? <LongList list={list}/> : <ShortList list={list}/> }

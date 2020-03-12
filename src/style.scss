@@ -16,6 +16,16 @@ body {
   line-height: 1.6;
   margin: 10px;
 }
+ul.inline {
+  li {
+    display: inline-block;
+    padding: 0 1rem;
+    border-right: solid 1px;
+    &:first {
+      border-left: solid 1px
+    }
+  }
+}
 .collapse {
   &::after {
     content: " [+]";
