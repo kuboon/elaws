@@ -37,16 +37,25 @@ function selectByPath(json, path){
 };
 function* searchJson(json, key){
   for(const k in json){
+    if(!key && k[0]=="@") continue;
     if(typeof json[k] === 'object') yield* searchJson(json[k], key)
-    else if(!key || (k == key)) yield json[k]
+    else if((k == key) || !key) yield json[k]
   }
+}
+function rootDescription(json){
+  if(json.EnactStatement) return getSentence(json.EnactStatement)
+  if(json.Preamble){
+    return getSentence(json.Preamble)
+  }
+  return ""
 }
 function getSentence(json){
   const it = searchJson(json, null)
   let buf = ""
   let c = it.next()
   while(!c.done){
-    buf += " " + c.value; if(buf.length>100) return buf
+    buf += (buf=="" ? "" : " ") + c.value;
+    if(buf.length > 100) return buf
     c = it.next()
   }
   return buf
@@ -68,11 +77,10 @@ export default async function(req: NowRequest, res: NowResponse) {
     const title = json.LawTitle[0]
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if(!path || path === ''){
-      const description = json.EnactStatement.join("/n")
+      const description = rootDescription(json)
       res.send(page({url: `${baseUrl}/${lawNum}`, source, xml, title, description}))
       return
     }
-    const main = json.MainProvision[0]
     const target = selectByPath(json, path)
     const description = target ? getSentence(target) : ""
     res.send(page({url: `${baseUrl}/${lawNum}/${path}`, source, xmlUrl: `/${lawNum}.xml`, title, description}))
