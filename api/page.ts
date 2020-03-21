@@ -66,7 +66,7 @@ function articleNum(path){
   const fusoku = a[0]==="s" ? `附則(${decodeURIComponent(a[1])}) ` : null
   if(fusoku) {a.shift(); a.shift()} 
   const jou = a[0] === "0" ? "前文" : `第${a[0]}条`
-  return ` ${fusoku}${jou}${a[1]}`
+  return ` ${fusoku||""}${jou}${a[1]||""}`
 }
 export default async function(req: NowRequest, res: NowResponse) {
   const url = new URL(req.url, `http://${req.headers.host}`)
