@@ -60,6 +60,14 @@ function getSentence(json){
   }
   return buf
 }
+function articleNum(path){
+  const a = path.split("-")
+  // const kanji = "〇一二三四五六七八九"
+  const fusoku = a[0]==="s" ? `附則(${decodeURIComponent(a[1])}) ` : null
+  if(fusoku) {a.shift(); a.shift()} 
+  const jou = a[0] === "0" ? "前文" : `第${a[0]}条`
+  return ` ${fusoku}${jou}${a[1]}`
+}
 export default async function(req: NowRequest, res: NowResponse) {
   const url = new URL(req.url, `http://${req.headers.host}`)
   const [lawNum1, path] = url.pathname.split("/").slice(1)
@@ -83,7 +91,7 @@ export default async function(req: NowRequest, res: NowResponse) {
     }
     const target = selectByPath(json, path)
     const description = target ? getSentence(target) : ""
-    res.send(page({url: `${baseUrl}/${lawNum}/${path}`, source, xmlUrl: `/${lawNum}.xml`, title, description}))
+    res.send(page({url: `${baseUrl}/${lawNum}/${path}`, source, xmlUrl: `/${lawNum}.xml`, title: title + articleNum(path), description}))
   }catch(e){
     if(e === "PathNotFound"){
       res.status(404)

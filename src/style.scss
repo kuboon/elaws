@@ -17,9 +17,10 @@ body {
   margin: 10px;
 }
 ul.inline {
+  padding: 0;
   li {
     display: inline-block;
-    padding: 0 1rem;
+    padding: 0 0.25rem;
     border-right: solid 1px;
     &:first-child {
       border-left: solid 1px

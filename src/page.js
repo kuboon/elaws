@@ -4,7 +4,7 @@ function elemToPath(el){
   let ret = []
   const suppl = el.closest("SupplProvision")
   if(suppl){
-    ret.push("s-" + suppl.attributes.AmendLawNum.value)
+    ret.push("s-" + (suppl.attributes.AmendLawNum?.value || 0))
   }
   blockElems.forEach(name => {
     const container = el.closest(name)

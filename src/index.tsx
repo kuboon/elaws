@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { useDebouncedCallback } from "use-debounce";
 globalThis.h = h;
 
-const LongList = ({ children, list }) => {
+const LongList = ({list}) => {
   const groups = {}
   list.forEach(i => {
     const year = String(i.PromulgationDate).slice(0,4)
@@ -18,7 +18,7 @@ const LongList = ({ children, list }) => {
     </li>
   )
 )
-const ShortList = ({ children, list }) => (
+const ShortList = ({list}) => (
   list.map((i: any) => 
     <li>
       <a href={i.LawNo}>{i.PromulgationDate}: {i.LawName}</a>
@@ -31,7 +31,8 @@ const App = ({ children, ...props }) => {
   const list = props.list.filter(i => i.PromulgationDate.toString().includes(text) || i.LawName.includes(text))
   return (
     <Fragment>
-    絞り込み検索 <input type="text" onChange={e => textChanged(e.target.value)}/>
+    <p>絞り込み検索 <input type="text" onChange={e => textChanged(e.target.value)}/></p>
+    <p>件数: {list.length}</p>
     <ul class="list">
       {list.length > 100 ? <LongList list={list}/> : <ShortList list={list}/> }
     </ul>
