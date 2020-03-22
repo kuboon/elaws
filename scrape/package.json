@@ -1,0 +1,30 @@
+{
+  "name": "elaws-scrape",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/legal-tech/elaws",
+  "author": "@kuboon",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "tsc --sourceMap --watch index.ts"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^16.1.0",
+    "@types/node": "^13.9.3",
+    "@types/unzipper": "^0.10.3",
+    "jest": "^25",
+    "source-map-support": "^0.5.16",
+    "ts-jest": "^25",
+    "ts-lint": "^4.5.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "got": "^10.6.0",
+    "jsdom": "^16.2.1",
+    "node-fetch": "^2.6.0",
+    "saxophone": "^0.6.1",
+    "unzipper": "^0.10.10"
+  }
+}

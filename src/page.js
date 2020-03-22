@@ -72,17 +72,12 @@ async function prepareXml(){
 window.addEventListener("load", prepareXml)
 window.addEventListener('popstate', selectByPath)
 document.addEventListener("click", onClick)
-/*
-<SupplProvision AmendLawNum="昭和二二年四月一六日法律第六一号" Extract="true">
-      <SupplProvisionLabel>附　則</SupplProvisionLabel>
-      <Article Num="33">
-        <ArticleTitle>第三十三条</ArticleTitle>
-        <Paragraph Num="1">
-          <ParagraphNum></ParagraphNum>
-          <ParagraphSentence>
-            <Sentence>この法律は、日本国憲法施行の日から、これを施行する。</Sentence>
-          </ParagraphSentence>
-        </Paragraph>
-      </Article>
-    </SupplProvision>
-    */
+if(navigator.share){
+  document.querySelector("#share").addEventListener("click", ()=>{
+    navigator.share({
+      title: "",
+      text: "",
+      url: ""
+    })
+  })
+}
