@@ -38,6 +38,17 @@ ul.inline {
 .selected {
   background-color: #fcc;
 }
+#share {
+  display: none;
+  position: relative;
+  svg {
+    position: absolute;
+    width: 3rem;
+    top: -3rem;
+    color: pink;
+    opacity: 0.5;
+  }
+}
 Law * {
   display: block;
 }
@@ -102,4 +113,16 @@ Sentence {
 }
 Ruby {
   display: inline;
+}
+TableStruct {
+  display: table;
+}
+TableRow {
+  display: table-row;
+}
+TableColumn {
+  display: table-cell;
+}
+StyleStruct {
+  display: none;
 }

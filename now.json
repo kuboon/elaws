@@ -12,7 +12,6 @@
       "includeFiles": "data/index.xml"
     }
   },
-  "regions": ["hnd1"],
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [

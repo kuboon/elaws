@@ -1,5 +1,6 @@
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"]
 const blockElems = ["Article", "Paragraph", "Item", "Subitem1"]
+const share = document.querySelector("#share")
 function elemToPath(el){
   let ret = []
   const suppl = el.closest("SupplProvision")
@@ -52,9 +53,14 @@ function onClick(ev){
 }
 function select(el){
   document.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"))
+  share.style.display = "none"
   if(!el) return
   el.classList.add("selected")
-  el.scrollIntoView({behavior: "smooth", block: 'center'});
+  scrollTo({top: el.offsetTop - window.innerHeight/2, behavior: "smooth"})
+  if(navigator.share){
+    el.prepend(share)
+    share.style.display = "block"
+  }
 }
 function selectByPath(){
   const {pathname} = document.location
@@ -73,11 +79,11 @@ window.addEventListener("load", prepareXml)
 window.addEventListener('popstate', selectByPath)
 document.addEventListener("click", onClick)
 if(navigator.share){
-  document.querySelector("#share").addEventListener("click", ()=>{
+  share.addEventListener("click", ()=>{
     navigator.share({
-      title: "",
-      text: "",
-      url: ""
+      title: document.title,
+      text: share.parentElement.innerText.slice(0,100),
+      url: location.href
     })
   })
 }
