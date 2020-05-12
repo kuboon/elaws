@@ -16,8 +16,6 @@
     "jest": "^25",
     "source-map-support": "^0.5.16",
     "ts-jest": "^25",
-    "ts-lint": "^4.5.1",
-    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"
   },
   "dependencies": {
