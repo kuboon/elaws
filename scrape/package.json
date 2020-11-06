@@ -1,8 +1,8 @@
 {
   "name": "elaws-scrape",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/legal-tech/elaws",
+  "main": "index.ts",
+  "repository": "https://github.com/kuboon/elaws",
   "author": "@kuboon",
   "license": "MIT",
   "private": true,
@@ -16,7 +16,7 @@
     "jest": "^25",
     "source-map-support": "^0.5.16",
     "ts-jest": "^25",
-    "typescript": "^3.8.3"
+    "typescript": "^4"
   },
   "dependencies": {
     "got": "^10.6.0",

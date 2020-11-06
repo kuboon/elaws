@@ -1,117 +1,104 @@
-require('source-map-support').install({environment: 'node'});
+require('source-map-support').install({ environment: 'node' })
 
 import * as https from 'https'
-import got from 'got'
-import {IncomingMessage} from 'http'
-import * as unzip from 'unzipper'
-import {pipeline, Transform, Writable} from 'stream'
-import {writeFileSync} from "fs";
-import {promisify} from 'util'
-import {JSDOM} from 'jsdom'
-require('events').defaultMaxListeners = 15;
-const Saxophone = require('saxophone');
-const pipe = promisify(pipeline);
+import * as fs from 'fs'
+import { pipeline, Readable, Transform, Writable } from 'stream'
+import { promisify } from 'util'
 
-class OnlyXml extends Transform {
-  constructor(opts = {}){
-    super({objectMode: true, ...opts})
-  }
-  _transform(e, _enc, done){
-    const ext = e.path.split(".").slice(-1)[0];
-    if (e.type !== "File" || ext !== 'xml') {
-      return e.autodrain().promise().then(done);
-    }
-    this.push(e)
-    done()
-  }
-}
-class PickTitle extends Transform {
-  constructor(opts = {}){
-    super({objectMode: true, ...opts})
-  }
-  async _transform(e, _enc, done){
-    const path = e.path.split("/").slice(-1)[0];
-    const result = {path}
-    await pipe(e, parserFactory(result))
-    this.push(result)
-    done()
-  }
-}
-function parserFactory(ret){
-  const parser = new Saxophone();
+import got from 'got'
+import { JSDOM } from 'jsdom'
+import { execSync } from 'child_process'
+import { exit } from 'process'
+
+require('events').defaultMaxListeners = 15
+const Saxophone = require('saxophone')
+const pipe = promisify(pipeline)
+
+function parserFactory (ret) {
+  const parser = new Saxophone()
   const tagopen = tag => {
-    switch(tag.name){
-    case "LawNum":
-      parser.once('text', text => {ret["name"] = text.contents})
-      break;
-    case "LawTitle":
-      parser.once('text', text => {
-        ret["title"] = text.contents
-        parser.off('tagopen', tagopen)
-      })
-      break;
+    switch (tag.name) {
+      case 'LawNum':
+        parser.once('text', text => {
+          ret['name'] = text.contents
+        })
+        break
+      case 'LawTitle':
+        parser.once('text', text => {
+          ret['title'] = text.contents
+          parser.off('tagopen', tagopen)
+        })
+        break
     }
   }
   parser.on('tagopen', tagopen)
   return parser
 }
-
-class ResultReceiver extends Writable {
-  public result: any[];
-  constructor(opts = {}){
-    super({objectMode: true, ...opts})
-    this.result = []
-  }
-  _write(obj:any, _, next){
-    this.result.push(obj)
-    next()
+async function getIso (num) {
+  const fileName = `../iso/${num}.iso`
+  if (!fs.existsSync(fileName)) {
+    return new Promise((ok, ng) =>
+      https.get(`https://elaws.e-gov.go.jp/download/${num}.iso`, res => {
+        if (res.statusCode == 200) {
+          ok(pipe(res, fs.createWriteStream(fileName)))
+        } else ng(res)
+      })
+    )
   }
 }
-async function getAndExtract(num, all, errors) {
-  console.log(num)
-  const res: IncomingMessage = await new Promise(
-    (ok, ng) => 
-      https.get(`https://elaws.e-gov.go.jp/download/${num}.zip`, res => 
-        res.statusCode == 200 ? ok(res) : ng(res)
-      )
+async function buildIndex () {
+  const ret: any = {}
+  const dirents = await new Promise<fs.Dirent[]>((ok, ng) =>
+    fs.readdir('../xml', { withFileTypes: true }, (err, dirents) => {
+      if (err) {
+        console.error(err)
+        return ng(err)
+      }
+      ok(dirents)
+    })
   )
-  const receiver = new ResultReceiver
-  await pipe(
-    res
-  , unzip.Parse()
-  , new OnlyXml
-  , new PickTitle
-  , receiver
-  ).catch(err => {
-    if (err.code === "ERR_STREAM_PREMATURE_CLOSE") return; 
-    if (err){
-      errors.push([num, err]);
-      console.error(err)
+  for (const dirent of dirents) {
+    if (dirent.isDirectory()) {
+      return
     }
-  });
-  receiver.result.forEach(e => {
-    all[e.name] = {
-      num,
-      path: e.path,
-      title: e.title
+
+    const fStream = fs.createReadStream('../xml/' + dirent.name)
+    const props: any = {}
+    await pipe(fStream, parserFactory(props))
+    ret[props.name] = {
+      path: dirent.name,
+      title: props.title
     }
-  })
+  }
+  return ret
 }
-async function zipList() {
+async function zipList () {
   const res = await got(`https://elaws.e-gov.go.jp/download/lawdownload.html`)
-  const { document } = (new JSDOM(res.body)).window;
-  const list = Array.from(document.querySelectorAll("#sclTbl a[href]")).map(a => {
-    const match = a.attributes["href"].value.match(/javascript:lawdata_download\('(...).zip'\)/)
-    return match ? match[1] : null
-  }).filter(e=>e)
+  const { document } = new JSDOM(res.body).window
+  const list = Array.from(document.querySelectorAll('#sclTbl a[href]'))
+    .map(a => {
+      const match = a.attributes['href'].value.match(
+        /javascript:lawdata_download\('(...).zip'\)/
+      )
+      return match ? match[1] : null
+    })
+    .filter(e => e)
   return list
 }
-async function main() {
-  const all = {}, errors = [];
-  for(let i of await zipList()){
-    await getAndExtract(i, all, errors)
+async function main () {
+  const errors = []
+  const list = await zipList()
+  for (let num of await zipList()) {
+    await getIso(num).catch(err => errors.push({ num, err }))
   }
-  writeFileSync('index.json', JSON.stringify(all));
-  console.log('errors', errors);
+  if (errors.length > 0) {
+    console.error(errors)
+    exit(1)
+  }
+  // you need sudo apt install p7zip-full
+  execSync("7z e -ir!'*.xml' -y -o../xml '../iso/*.iso'")
+
+  const index = buildIndex()
+  fs.writeFileSync('../xml/index.json', JSON.stringify(index))
 }
-main();
+main()
