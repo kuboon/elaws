@@ -75,16 +75,10 @@ function articleNum (path) {
 }
 export default async function (req: NowRequest, res: NowResponse) {
   const url = new URL(req.url, `http://${req.headers.host}`)
-  const [lawNum1, path] = url.pathname.split('/').slice(1)
-  const [lawNum, ext] = lawNum1.split('.')
+  const [lawNum, path] = url.pathname.split('/').slice(1)
   try {
     const source = 'https://elaws.e-gov.go.jp/api/1/lawdata/' + lawNum
     const xml = (await got(source)).body
-    if (ext === 'xml') {
-      res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
-      res.end(xml)
-      return
-    }
     const fullJson = xmlParse.parse(xml, {
       textNodeName: '_text',
       ignoreAttributes: false,
@@ -107,7 +101,7 @@ export default async function (req: NowRequest, res: NowResponse) {
       page({
         url: `${baseUrl}/${lawNum}/${path}`,
         source,
-        xmlUrl: `/${lawNum}.xml`,
+        xmlUrl: source,
         title: title + articleNum(path),
         description
       })
