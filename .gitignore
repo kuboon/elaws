@@ -5,3 +5,5 @@ public
 iso/
 
 yarn-error.log
+
+.vercel

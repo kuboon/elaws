@@ -2,9 +2,6 @@
   "version": 2,
   "env": {},
   "functions": {
-    "api/list.ts": {
-      "includeFiles": "data/**"
-    },
     "api/page.ts": {
       "includeFiles": "data/**"
     },
