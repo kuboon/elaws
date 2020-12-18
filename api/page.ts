@@ -86,7 +86,7 @@ export default async function (req: NowRequest, res: NowResponse) {
     })
     const json =
       fullJson.DataRoot[0].ApplData[0].LawFullText[0].Law[0].LawBody[0]
-    const title = json.LawTitle[0]
+    const title = json.LawTitle[0]._text
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
       const description = rootDescription(json)
