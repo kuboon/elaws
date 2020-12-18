@@ -76,6 +76,11 @@ function articleNum (path) {
 export default async function (req: NowRequest, res: NowResponse) {
   const url = new URL(req.url, `http://${req.headers.host}`)
   const [lawNum, path] = url.pathname.split('/').slice(1)
+  if (lawNum.startsWith('favicon')) {
+      res.status(404)
+      res.end()
+      return
+    }
   try {
     const source = 'https://elaws.e-gov.go.jp/api/1/lawdata/' + lawNum
     const xml = (await got(source)).body
@@ -84,8 +89,13 @@ export default async function (req: NowRequest, res: NowResponse) {
       ignoreAttributes: false,
       arrayMode: 'strict'
     })
-    const json =
-      fullJson.DataRoot[0].ApplData[0].LawFullText[0].Law[0].LawBody[0]
+  if (!fullJson.DataRoot) {
+      res.status(404)
+      res.end()
+      return
+    }
+    const root = fullJson.DataRoot[0]
+    const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0]
     const title = json.LawTitle[0]._text
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
