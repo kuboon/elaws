@@ -77,10 +77,10 @@ export default async function (req: NowRequest, res: NowResponse) {
   const url = new URL(req.url, `http://${req.headers.host}`)
   const [lawNum, path] = url.pathname.split('/').slice(1)
   if (lawNum.startsWith('favicon')) {
-      res.status(404)
-      res.end()
-      return
-    }
+    res.status(404)
+    res.end()
+    return
+  }
   try {
     const source = 'https://elaws.e-gov.go.jp/api/1/lawdata/' + lawNum
     const xml = (await got(source)).body
@@ -89,7 +89,7 @@ export default async function (req: NowRequest, res: NowResponse) {
       ignoreAttributes: false,
       arrayMode: 'strict'
     })
-  if (!fullJson.DataRoot) {
+    if (!fullJson.DataRoot) {
       res.status(404)
       res.end()
       return
