@@ -24,7 +24,7 @@ function selectByPath (json, path) {
   a.forEach((v, i) => {
     if (v == '0') return
     const name = blockElems[i]
-    if (!name) throw 'PathNotFound'
+    if (!name) throw PathNotFound
     query.push(`${name}[?(@.@_Num=="${v}")]`)
   })
   const q = query.join('..')
@@ -96,7 +96,7 @@ export default async function (req: NowRequest, res: NowResponse) {
     }
     const root = fullJson.DataRoot[0]
     const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0]
-    const title = json.LawTitle[0]._text
+    const title = json.LawTitle[0]
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
       const description = rootDescription(json)
