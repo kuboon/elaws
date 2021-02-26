@@ -27,7 +27,7 @@ const LongList = ({ list }) => {
 const ShortList = ({ list }) =>
   list.map((i: any) => (
     <li>
-      <a href={i.LawNo}>
+      <a href={i.LawId}>
         {i.PromulgationDate}: {i.LawName}
       </a>
     </li>

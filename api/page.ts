@@ -82,14 +82,14 @@ export default async function (req: NowRequest, res: NowResponse) {
     return
   }
   try {
-    const source = 'https://elaws.e-gov.go.jp/api/1/lawdata/' + lawNum
-    const xml = (await got(source)).body
+    const apiUrl = 'https://elaws.e-gov.go.jp/api/1/lawdata/' + lawNum
+    const xml = (await got(apiUrl)).body
     const fullJson = xmlParse.parse(xml, {
       textNodeName: '_text',
       ignoreAttributes: false,
       arrayMode: 'strict'
     })
-    if (!fullJson.DataRoot) {
+    if (fullJson.DataRoot[0].Result[0].Code[0] != 0) {
       res.status(404)
       res.end()
       return
@@ -97,11 +97,13 @@ export default async function (req: NowRequest, res: NowResponse) {
     const root = fullJson.DataRoot[0]
     const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0]
     const title = json.LawTitle[0]
+    console.log(lawNum.match(/\d/))
+    const source = lawNum[0] === '%' ? apiUrl : 'https://elaws.e-gov.go.jp/document?lawid=' + lawNum
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
       const description = rootDescription(json)
       res.send(
-        page({ url: `${baseUrl}/${lawNum}`, source, xml, title, description })
+        page({ url: `${baseUrl}/${lawNum}`, source, xml: xml.replace(/<([^>]+)\/>/g, '<$1></$1>'), title, description })
       )
       return
     }
@@ -111,7 +113,7 @@ export default async function (req: NowRequest, res: NowResponse) {
       page({
         url: `${baseUrl}/${lawNum}/${path}`,
         source,
-        xmlUrl: source,
+        xmlUrl: apiUrl,
         title: title + articleNum(path),
         description
       })

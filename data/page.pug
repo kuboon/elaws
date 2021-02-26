@@ -20,8 +20,10 @@ html(xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja")
     link(rel="mask-icon" href="/favicon.svg" color="pink")
     link(rel="icon" type="image/svg+xml" href="/favicon.svg")
   body
-    #source
-      a(href=source) 原本へのリンク
+    header
+      h1#title
+        a(href='/') 日本法令引用URL
+      a#source(href=source) 原本へのリンク
     xml#xml(xmlUrl=xmlUrl)!= xml
     #share(style="display: none")
       <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

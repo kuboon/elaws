@@ -84,7 +84,7 @@ async function prepareXml () {
     const content = await fetch(xml.attributes.xmlUrl.value).then(res =>
       res.text()
     )
-    xml.innerHTML = content
+    xml.innerHTML = content.replace(/<([^>]+)\/>/g, '<$1></$1>')
   }
   selectByPath()
 }

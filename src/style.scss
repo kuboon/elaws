@@ -16,6 +16,11 @@ body {
   line-height: 1.6;
   margin: 10px;
 }
+#title {
+  a {
+    text-decoration: none;
+  }
+}
 ul.inline {
   padding: 0;
   li {
