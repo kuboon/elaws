@@ -20,6 +20,8 @@ function selectByPath (json, path) {
     query.push(
       `SupplProvision[?(@.@_AmendLawNum=="${decodeURIComponent(a.shift())}")]`
     )
+  } else {
+    query.push('MainProvision')
   }
   a.forEach((v, i) => {
     if (v == '0') return
@@ -31,7 +33,7 @@ function selectByPath (json, path) {
   try {
     const ret = jsonpath.query(json, q)
     if (ret.length == 0) throw 'PathNotFound'
-    if (ret.length > 1) console.error('path is not uniq', path)
+    if (ret.length > 1) console.error('path is not uniq', path, q, JSON.stringify(ret[2]))
     return ret[0]
   } catch (e) {
     console.error('jsonpath error', e)
@@ -96,8 +98,9 @@ export default async function (req: NowRequest, res: NowResponse) {
     }
     const root = fullJson.DataRoot[0]
     const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0]
-    const title = json.LawTitle[0]
-    console.log(lawNum.match(/\d/))
+    let title = json.LawTitle[0]
+    if(title._text) title = title._text[0]
+    console.log(title)
     const source = lawNum[0] === '%' ? apiUrl : 'https://elaws.e-gov.go.jp/document?lawid=' + lawNum
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
