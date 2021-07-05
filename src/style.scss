@@ -1,3 +1,11 @@
+html {
+  --color-normal: hsl(0, 0%, 0%);
+  --bg-normal: hsl(0, 0%, 100%);
+  @media (prefers-color-scheme: dark) {
+    --color-normal: hsl(0, 0%, 100%);
+    --bg-normal: hsl(0, 0%, 0%);  
+  }
+}
 @supports (font: -apple-system-body) {
   html {
     font: -apple-system-body;
@@ -13,6 +21,7 @@
 
 body {
   font-family: minmoji;
+  font-size: 16px;
   line-height: 1.6;
   margin: 10px;
 }
@@ -46,10 +55,12 @@ ul.inline {
 #share {
   display: none;
   position: relative;
+  z-index: 100;
   svg {
     position: absolute;
     width: 3rem;
-    top: -3rem;
+    bottom: -1rem;
+    right: 0;
     color: pink;
     opacity: 0.5;
   }
@@ -83,6 +94,42 @@ LawTitle {
   font-size: 2.5em;
   border-bottom: dotted black 3px;
 }
+
+PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
+  position: sticky;
+  background-color: var(--bg-normal);
+  top: 0;
+  z-index: 4;
+}
+Part {
+  Chapter {
+    &Title {
+      top: 2.9rem;
+      z-index: 3;
+    }
+    ArticleTitle {
+      top: 5rem;
+      z-index: 1;
+    }
+    Section {
+      &Title {
+        top: 5rem;
+        z-index: 2;
+      }
+      ArticleTitle {
+        top: 6.5rem;
+        z-index: 1;
+      }
+    }
+  }
+}
+Chapter {
+  SectionTitle, ArticleTitle {
+    top: 2.3rem;
+    z-index: 2;
+  }
+}
+
 Part {
   @include section($part-color);
   &Title {
@@ -90,25 +137,49 @@ Part {
   }
 }
 Chapter {
-  @include section(adjust-hue($part-color, 30degrees));
+  @include section(adjust-hue($part-color, 30deg));
   &Title {
     font-size: 1.5rem;
   }
 }
 Article {
-  @include section(adjust-hue($part-color, 60degrees));
+  @include section(adjust-hue($part-color, 60deg));
 }
 Paragraph, Item, SubItem1 {
   @include flex-container;
 }
 Paragraph {
-  @include section(adjust-hue($part-color, 90degrees));
+  @include section(adjust-hue($part-color, 90deg));
 }
 Item {
-  @include section(adjust-hue($part-color, 120degrees));
+  @include section(adjust-hue($part-color, 120deg));
 }
 SubItem1 {
-  @include section(adjust-hue($part-color, 150degrees));
+  @include section(adjust-hue($part-color, 150deg));
+}
+
+SupplProvision {
+  @include section($part-color);
+  &::before {
+    content: attr(AmendLawNum);
+    display: block;
+    background-color: var(--bg-normal);
+    position: sticky;
+    top: 0;
+    z-index: 4;
+  }
+  &Label {
+    background-color: var(--bg-normal);
+    position: sticky;
+    top: 1.5rem;
+    z-index: 3;
+  }
+  Article {
+    &Title {
+      top: 3.1rem;
+      z-index: 2;
+    }
+  }
 }
 Column {
   display: block;

@@ -67,9 +67,9 @@ function select (el) {
   share.style.display = 'none'
   if (!el) return
   el.classList.add('selected')
-  scrollTo({ top: el.offsetTop - window.innerHeight / 2, behavior: 'smooth' })
+  scrollTo({ top: el.offsetTop - window.innerHeight / 3, behavior: 'smooth' })
   if (navigator.share) {
-    el.prepend(share)
+    el.append(share)
     share.style.display = 'block'
   }
 }
