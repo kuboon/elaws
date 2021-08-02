@@ -1,5 +1,5 @@
 import { h, render, Component, Fragment } from 'preact'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { useDebouncedCallback } from 'use-debounce'
 globalThis.h = h
 
@@ -33,12 +33,25 @@ const ShortList = ({ list }) =>
     </li>
   ))
 const App = ({ children, ...props }) => {
+  const [list, setList] = useState([])
   const [text, setText] = useState('')
   const [textChanged] = useDebouncedCallback(setText, 1000)
-  const list = props.list.filter(
-    i =>
-      i.PromulgationDate.toString().includes(text) || i.LawName.includes(text)
-  )
+  useEffect(() => {
+    fetch('/api/list')
+      .then(r => r.json())
+      .then(r =>
+        r
+          .reverse()
+          .filter(
+            i =>
+              i.PromulgationDate.toString().includes(text) ||
+              i.LawName.includes(text)
+          )
+      ).then(setList)
+  },[])
+  if (list.length == 0) {
+    return 'loading'
+  }
   return (
     <Fragment>
       <p>
@@ -58,6 +71,5 @@ const App = ({ children, ...props }) => {
 }
 
 window.addEventListener('load', async () => {
-  const json = await fetch('/api/list').then(r => r.json())
-  render(<App list={json.reverse()} />, document.getElementById('app'))
+  render(<App></App>, document.getElementById('app'))
 })
