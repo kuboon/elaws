@@ -100,7 +100,6 @@ export default async function (req: NowRequest, res: NowResponse) {
     const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0]
     let title = json.LawTitle[0]
     if(title._text) title = title._text[0]
-    console.log(title)
     const source = lawNum[0] === '%' ? apiUrl : 'https://elaws.e-gov.go.jp/document?lawid=' + lawNum
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
     if (!path || path === '') {
