@@ -51,16 +51,20 @@ ul.inline {
 }
 .selected {
   background-color: #fcc;
+  position: relative;
+  * {
+    background-color: inherit;
+  }
 }
 #share {
-  display: none;
-  position: relative;
+  position: absolute;
   z-index: 100;
+  height: 1.5rem;
+  top: -1.5rem;
+  right: 0;
   svg {
-    position: absolute;
-    width: 3rem;
-    bottom: -1rem;
-    right: 0;
+    height: 1.5rem;
+    width: 1.5rem;
     color: pink;
     opacity: 0.5;
   }
