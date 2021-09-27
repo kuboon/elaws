@@ -33,21 +33,24 @@ const ShortList = ({ list }) =>
     </li>
   ))
 const App = ({ children, ...props }) => {
+  const [fullList, setFullList] = useState([])
   const [list, setList] = useState([])
   const [text, setText] = useState('')
-  const [textChanged] = useDebouncedCallback(setText, 1000)
-  useEffect(() => {
-    fetch('/api/list')
-      .then(r => r.json())
-      .then(r =>
-        r
-          .reverse()
-          .filter(
+  const [textChanged] = useDebouncedCallback(updateList, 1000)
+  function updateList(){
+    setList(fullList.filter(
             i =>
               i.PromulgationDate.toString().includes(text) ||
               i.LawName.includes(text)
-          )
-      ).then(setList)
+    ))
+  }
+  useEffect(() => {
+    fetch('/api/list')
+      .then(r => r.json())
+      .then(r => {
+        setFullList(r.reverse())
+        updateList()
+    })
   },[])
   if (list.length == 0) {
     return 'loading'
