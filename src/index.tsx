@@ -32,26 +32,27 @@ const ShortList = ({ list }) =>
       </a>
     </li>
   ))
-const App = ({ children, ...props }) => {
+const App = () => {
   const [fullList, setFullList] = useState([])
   const [list, setList] = useState([])
   const [text, setText] = useState('')
-  const [textChanged] = useDebouncedCallback(updateList, 1000)
-  function updateList(){
-    setList(fullList.filter(
-            i =>
-              i.PromulgationDate.toString().includes(text) ||
-              i.LawName.includes(text)
-    ))
-  }
+  const [textChanged] = useDebouncedCallback(setText, 1000)
+  useEffect(() => {
+    setList(
+      fullList.filter(
+        i =>
+          i.PromulgationDate.toString().includes(text) ||
+          i.LawName.includes(text)
+      )
+    )
+  }, [fullList, text])
   useEffect(() => {
     fetch('/api/list')
       .then(r => r.json())
       .then(r => {
         setFullList(r.reverse())
-        updateList()
-    })
-  },[])
+      })
+  }, [])
   if (list.length == 0) {
     return 'loading'
   }
@@ -59,7 +60,7 @@ const App = ({ children, ...props }) => {
     <Fragment>
       <p>
         絞り込み検索{' '}
-        <input type='text' onChange={e => textChanged(e.target.value)} />
+        <input type='text' onChange={(e: any) => textChanged(e.target.value)} />
       </p>
       <p>件数: {list.length}</p>
       <ul class='list'>
