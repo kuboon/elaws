@@ -1,3 +1,15 @@
+/** @jsx h */
+import { h } from "../deps.ts";
+
+interface Props {
+  params: Record<string, string | string[]>;
+}
+
+export default function Greet(props: Props) {
+  return <div>Hello {props.params.name}</div>;
+}
+
+
 const containerElems = ['PartTitle', 'ChapterTitle', 'SectionTitle']
 const blockElems = ['Article', 'Paragraph', 'Item', 'Subitem1']
 const share = document.querySelector('#share')
