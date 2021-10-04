@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { xmlParser, pug, jsonpath } from "../../deps.ts";
+import { xmlParser, pug, jsonpath } from "../../server_deps.ts";
 
 const baseUrl = "https://elaws.kbn.one";
 // const blockElems = ["Part", "Chapter", "Section", "Article", "Paragraph", "Item", "Subitem1"]
@@ -29,7 +29,7 @@ function selectByPath(json: LawContent, path: string) {
   });
   const q = query.join("..");
   try {
-    const ret = jsonpath.query(json, q);
+    const ret = jsonpath.JSONPath().query(json, q);
     if (ret.length == 0) throw "PathNotFound";
     if (ret.length > 1) {
       console.error("path is not uniq", path, q, JSON.stringify(ret[2]));

@@ -1,5 +1,8 @@
-import * as xmlParser from 'https://cdn.pika.dev/fast-xml-parser@^3.17.3';
+import { xmlParser } from "../server_deps.ts";
+import { LawItem } from "../types.ts";
 
-const xml = await fetch('https://elaws.e-gov.go.jp/api/1/lawlists/1').then(x=>x.text())
-const json = xmlParser.parse(xml)
-export default json.DataRoot.ApplData.LawNameListInfo
+export const lawListP = fetch("https://elaws.e-gov.go.jp/api/1/lawlists/1")
+  .then((x) => x.text())
+  .then((xml) =>
+    xmlParser.parse(xml).DataRoot.ApplData.LawNameListInfo as LawItem[]
+  );

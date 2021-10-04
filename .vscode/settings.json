@@ -3,6 +3,8 @@
   "deno.lint": true,
   "deno.unstable": true,
   "deno.suggest.imports.hosts": {
-    "https://cdn.pika.dev": false
-  }
+    "https://cdn.pika.dev": false,
+    "https://raw.githubusercontent.com": false
+  },
+  "deno.importMap": "import_map.json"
 }

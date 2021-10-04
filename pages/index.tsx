@@ -1,11 +1,14 @@
 /// <reference lib="dom" />
 // deno-lint-ignore-file no-explicit-any
 /** @jsx h */
+import { LawItem } from '../types.ts'
 import {
   h,
   useState,
   Fragment,
   useEffect,
+  IS_BROWSER,
+  PageConfig
 } from '../deps.ts'
 import useDebouncedCallback from '../lib/useDebouncedCallback.ts'
 
@@ -14,35 +17,30 @@ declare namespace JSX {
     List: void
     div: void
     script: void
-    [key: string]: any
   }
 }
-type LawItem = { LawId: string; PromulgationDate: string; LawName: string }
+
+export const config: PageConfig = { runtimeJS: true }
 
 export default function Home () {
+  const items = [
+    {name: '321CONSTITUTION', href: '憲法'},
+    {name: '129AC0000000089', href: '民法'},
+    {name: '132AC0000000048', href: '商法'},
+    {name: '140AC0000000045', href: '刑法'},
+    {name: '408AC0000000109', href: '民事訴訟法'},
+    {name: '323AC0000000131', href: '刑事訴訟法'}
+  ]
   return (
     <div>
       <h1>日本法令引用 URL</h1>
       <div id='popular'>
         <ul class='inline'>
+          {items.map(x=>{
           <li>
-            <a href='/321CONSTITUTION'>憲法</a>
+            <a href={x.href}>{x.name}</a>
           </li>
-          <li>
-            <a href='129AC0000000089'>民法</a>
-          </li>
-          <li>
-            <a href='132AC0000000048'>商法</a>
-          </li>
-          <li>
-            <a href='140AC0000000045'>刑法</a>
-          </li>
-          <li>
-            <a href='408AC0000000109'>民事訴訟法</a>
-          </li>
-          <li>
-            <a href='323AC0000000131'>刑事訴訟法</a>
-          </li>
+          })}
         </ul>
       </div>
       <App />
@@ -97,29 +95,26 @@ const App = () => {
   const [text, setText] = useState('')
   const [textChanged] = useDebouncedCallback(setText, 1000)
   useEffect(() => {
+    fetch('./api/list').then(x=>x.json()).then(x=>{setFullList(x);setList(x)})
+  }, [])
+  useEffect(() => {
     setList(
-      fullList.filter(
+      fullList!.filter(
         i =>
           i.PromulgationDate.toString().includes(text) ||
           i.LawName.includes(text)
       )
     )
-  }, [fullList, text])
-  useEffect(() => {
-    fetch('/api/list')
-      .then(r => r.json())
-      .then(r => {
-        setFullList(r.reverse())
-      })
-  }, [])
-  if (list.length == 0) {
-    return <p>'loading'</p>
-  }
+  }, [text])
   return (
     <Fragment>
       <p>
         絞り込み検索{' '}
-        <input type='text' onChange={(e: any) => textChanged(e.target.value)} />
+        <input
+          type='text'
+          onChange={(e: any) => textChanged(e.target.value)}
+          disabled={!IS_BROWSER}
+        />
       </p>
       <p>件数: {list.length}</p>
       <ul class='list'>
@@ -131,6 +126,23 @@ const App = () => {
       </ul>
     </Fragment>
   )
+}
+let fetchLawList: ()=>Promise<LawItem[]>
+if (false) {
+  fetchLawList = () => {
+    const lawListP = new Promise<LawItem[]>(ok =>
+      ok([{ LawId: 'lawid', PromulgationDate: 'aaa', LawName: 'name' }])
+    )
+    return lawListP
+  }
+} else {
+  fetchLawList = async () => {
+    //const {lawListP} = await import('../lib/lawList.ts')
+    const lawListP = await new Promise<LawItem[]>(ok =>
+      ok([{ LawId: 'lawid', PromulgationDate: 'aaa', LawName: 'name' }])
+    )
+    return lawListP
+  }
 }
 
 /*
