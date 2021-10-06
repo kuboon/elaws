@@ -1,9 +1,9 @@
 /** @jsx h */
 /// <reference lib="dom" />
-import { h, IS_BROWSER, Fragment } from '../../deps.ts'
+import { h, IS_BROWSER, Fragment, Head } from '../../deps.ts'
 
 declare global {
-  namespace JSX {
+  namespace preact.JSX {
     interface IntrinsicElements {
       xml: any
     }
@@ -17,6 +17,40 @@ export default function Page (props: Props) {
   //<div>Hello {props.params.id} ;; {props.params.path}</div>
   return (
     <Fragment>
+      <Head>
+        <link rel='stylesheet' href='/style.css' />
+        <title>日本国憲法 前文1 - 日本法令引用 URL</title>
+        <meta property='og:site_name' content='日本法令引用 URL' />
+        <meta property='og:title' content='日本国憲法 前文1' />
+        <meta
+          property='og:description'
+          content='天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。'
+        />
+        <meta
+          property='og:url'
+          content='https://elaws.kbn.one/321CONSTITUTION/0-1'
+        />
+        <meta
+          property='og:image'
+          content='https://og.kbn.one/%23%20日本国憲法 前文1%0A天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。.png?md=1'
+        />
+        <meta property='og:image:width' content='833' />
+        <meta property='og:image:height' content='476' />
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' content='日本国憲法 前文1' />
+        <meta
+          name='twitter:description'
+          content='天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。'
+        />
+        <meta
+          name='twitter:image'
+          content='https://og.kbn.one/%23%20日本国憲法 前文1%0A天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。.png?md=1'
+        />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='icon' type='image/png' href='/favicon.png' />
+        <link rel='mask-icon' href='/favicon.svg' />
+        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+      </Head>
       <header>
         <h1 id='title'>
           <a href='/'>日本法令引用URL</a>
@@ -50,41 +84,3 @@ export default function Page (props: Props) {
     </Fragment>
   )
 }
-
-/*
-  <head>
-    <link rel="stylesheet" href="/style.css" />
-    <script defer="defer" src="/page.js"></script>
-    <title>日本国憲法 前文1 - 日本法令引用 URL</title>
-    <meta property="og:site_name" content="日本法令引用 URL" />
-    <meta property="og:title" content="日本国憲法 前文1" />
-    <meta
-      property="og:description"
-      content="天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。"
-    />
-    <meta
-      property="og:url"
-      content="https://elaws.kbn.one/321CONSTITUTION/0-1"
-    />
-    <meta
-      property="og:image"
-      content="https://og.kbn.one/%23%20日本国憲法 前文1%0A天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。.png?md=1"
-    />
-    <meta property="og:image:width" content="833" />
-    <meta property="og:image:height" content="476" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="日本国憲法 前文1" />
-    <meta
-      name="twitter:description"
-      content="天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。"
-    />
-    <meta
-      name="twitter:image"
-      content="https://og.kbn.one/%23%20日本国憲法 前文1%0A天皇は、日本国の象徴であり日本国民統合の象徴であつて、この地位は、主権の存する日本国民の総意に基く。.png?md=1"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="mask-icon" href="/favicon.svg" color="pink" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-*/

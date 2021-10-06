@@ -8,6 +8,7 @@ import {
   Fragment,
   useEffect,
   IS_BROWSER,
+  Head,
   PageConfig
 } from '../deps.ts'
 import useDebouncedCallback from '../lib/useDebouncedCallback.ts'
@@ -32,7 +33,19 @@ export default function Home () {
     {name: '323AC0000000131', href: '刑事訴訟法'}
   ]
   return (
-    <div>
+    <Fragment>
+    <Head>
+    <title>日本法令引用 URL</title>
+    <meta property="og:title" content="日本法令引用 URL"/>
+    <meta property="og:description" content="クリックで選択してかんたんシェア"/>
+  <meta property="og:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" /><meta name="twitter:description" />
+    <meta name="twitter:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/png" href="/favicon.56088456.png" />
+      <link rel="mask-icon" href="/favicon.e2a89832.svg" /><link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg" />
+
+      </Head>
       <h1>日本法令引用 URL</h1>
       <div id='popular'>
         <ul class='inline'>
@@ -48,7 +61,7 @@ export default function Home () {
         type='text/javascript'
         src='https://minmoji.ucda.jp/sealjs/https%3A__elaws.kbn.one'
       ></script>
-    </div>
+    </Fragment>
   )
 }
 
@@ -144,12 +157,3 @@ if (false) {
     return lawListP
   }
 }
-
-/*
-<title>日本法令引用 URL</title><meta property="og:title" content="日本法令引用 URL"><meta property="og:description" content="クリックで選択してかんたんシェア">
-  <meta property="og:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"><meta name="twitter:card" content="summary"><meta name="twitter:title"><meta name="twitter:description">
-    <meta name="twitter:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="icon" type="image/png" href="/favicon.56088456.png">
-      <link rel="mask-icon" href="/favicon.e2a89832.svg" color="pink"><link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg"></head><body>
-</body>
-*/
