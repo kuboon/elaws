@@ -25,34 +25,45 @@ export const config: PageConfig = { runtimeJS: true }
 
 export default function Home () {
   const items = [
-    {name: '321CONSTITUTION', href: '憲法'},
-    {name: '129AC0000000089', href: '民法'},
-    {name: '132AC0000000048', href: '商法'},
-    {name: '140AC0000000045', href: '刑法'},
-    {name: '408AC0000000109', href: '民事訴訟法'},
-    {name: '323AC0000000131', href: '刑事訴訟法'}
+    { name: '321CONSTITUTION', href: '憲法' },
+    { name: '129AC0000000089', href: '民法' },
+    { name: '132AC0000000048', href: '商法' },
+    { name: '140AC0000000045', href: '刑法' },
+    { name: '408AC0000000109', href: '民事訴訟法' },
+    { name: '323AC0000000131', href: '刑事訴訟法' }
   ]
   return (
     <Fragment>
-    <Head>
-    <title>日本法令引用 URL</title>
-    <meta property="og:title" content="日本法令引用 URL"/>
-    <meta property="og:description" content="クリックで選択してかんたんシェア"/>
-  <meta property="og:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"/>
-  <meta name="twitter:card" content="summary"/><meta name="twitter:title" /><meta name="twitter:description" />
-    <meta name="twitter:image" content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" type="image/png" href="/favicon.56088456.png" />
-      <link rel="mask-icon" href="/favicon.e2a89832.svg" /><link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg" />
-
+      <Head>
+        <title>日本法令引用 URL</title>
+        <meta property='og:title' content='日本法令引用 URL' />
+        <meta
+          property='og:description'
+          content='クリックで選択してかんたんシェア'
+        />
+        <meta
+          property='og:image'
+          content='https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1'
+        />
+        <meta name='twitter:card' content='summary' />
+        <meta name='twitter:title' />
+        <meta name='twitter:description' />
+        <meta
+          name='twitter:image'
+          content='https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1'
+        />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <link rel='icon' type='image/png' href='/favicon.56088456.png' />
+        <link rel='mask-icon' href='/favicon.e2a89832.svg' />
+        <link rel='icon' type='image/svg+xml' href='/favicon.e2a89832.svg' />
       </Head>
       <h1>日本法令引用 URL</h1>
       <div id='popular'>
         <ul class='inline'>
-          {items.map(x=>{
-          <li>
-            <a href={x.href}>{x.name}</a>
-          </li>
+          {items.map(x => {
+            ;<li>
+              <a href={x.href}>{x.name}</a>
+            </li>
           })}
         </ul>
       </div>
@@ -108,7 +119,12 @@ const App = () => {
   const [text, setText] = useState('')
   const [textChanged] = useDebouncedCallback(setText, 1000)
   useEffect(() => {
-    fetch('./api/list').then(x=>x.json()).then(x=>{setFullList(x);setList(x)})
+    fetch('./api/list')
+      .then(x => x.json())
+      .then(x => {
+        setFullList(x)
+        setList(x)
+      })
   }, [])
   useEffect(() => {
     setList(
@@ -140,7 +156,7 @@ const App = () => {
     </Fragment>
   )
 }
-let fetchLawList: ()=>Promise<LawItem[]>
+let fetchLawList: () => Promise<LawItem[]>
 if (false) {
   fetchLawList = () => {
     const lawListP = new Promise<LawItem[]>(ok =>
