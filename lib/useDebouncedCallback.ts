@@ -1,4 +1,4 @@
-import {useRef, useCallback, useEffect} from '../deps.ts'
+import {useRef, useCallback, useEffect} from '../client_deps.ts'
 export default function useDebouncedCallback(
   callback: Function,
   delay: number,

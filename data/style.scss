@@ -1,0 +1,208 @@
+html {
+  --color-normal: hsl(0, 0%, 0%);
+  --bg-normal: hsl(0, 0%, 100%);
+  @media (prefers-color-scheme: daaark) {
+    --color-normal: hsl(0, 0%, 100%);
+    --bg-normal: hsl(0, 0%, 0%);  
+  }
+}
+@supports (font: -apple-system-body) {
+  html {
+    font: -apple-system-body;
+  }
+}
+@font-face {
+    font-family: minmoji;
+    src: url('https://minmoji.ucda.jp/fontseot/https%3A__elaws.kbn.one');
+    src: local('minmoji'),
+        url('https://minmoji.ucda.jp/fontswoff/https%3A__elaws.kbn.one') format('woff'),
+        url('https://minmoji.ucda.jp/fonts/https%3A__elaws.kbn.one') format('opentype');
+}
+
+body {
+  font-family: minmoji;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 10px;
+}
+#title {
+  a {
+    text-decoration: none;
+  }
+}
+ul.inline {
+  padding: 0;
+  li {
+    display: inline-block;
+    padding: 0 0.25rem;
+    border-right: solid 1px;
+    &:first-child {
+      border-left: solid 1px
+    }
+  }
+}
+.collapse {
+  &::after {
+    content: " [+]";
+  }
+  ~ * {
+    display: none;
+  }
+}
+.selected {
+  background-color: #fcc;
+  position: relative;
+  * {
+    background-color: inherit;
+  }
+}
+#share {
+  position: absolute;
+  z-index: 100;
+  height: 1.5rem;
+  top: -1.5rem;
+  right: 0;
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+    color: pink;
+    opacity: 0.5;
+  }
+}
+Law * {
+  display: block;
+}
+Result, ApplData>LawNum, TOC {
+  display: none
+}
+$part-color: hsl(0, 50%, 50%);
+@mixin flex-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  &Title {
+    margin-right: 1rem;
+    break-after: avoid-column;
+  }
+  &Sentence {
+    break-after: column;
+  }
+}
+@mixin section($color) {
+  border-left: solid 4px $color;
+  margin-bottom: 1rem;
+  padding-left: 6px;
+}
+LawTitle {
+  font-size: 2.5em;
+  border-bottom: dotted black 3px;
+}
+
+PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
+  position: sticky;
+  background-color: var(--bg-normal);
+  top: 0;
+  z-index: 4;
+}
+Part {
+  Chapter {
+    &Title {
+      top: 2.9rem;
+      z-index: 3;
+    }
+    ArticleTitle {
+      top: 5rem;
+      z-index: 1;
+    }
+    Section {
+      &Title {
+        top: 5rem;
+        z-index: 2;
+      }
+      ArticleTitle {
+        top: 6.5rem;
+        z-index: 1;
+      }
+    }
+  }
+}
+Chapter {
+  SectionTitle, ArticleTitle {
+    top: 2.3rem;
+    z-index: 2;
+  }
+}
+
+Part {
+  @include section($part-color);
+  &Title {
+    font-size: 2rem;
+  }
+}
+Chapter {
+  @include section(adjust-hue($part-color, 30deg));
+  &Title {
+    font-size: 1.5rem;
+  }
+}
+Article {
+  @include section(adjust-hue($part-color, 60deg));
+}
+Paragraph, Item, SubItem1 {
+  @include flex-container;
+}
+Paragraph {
+  @include section(adjust-hue($part-color, 90deg));
+}
+Item {
+  @include section(adjust-hue($part-color, 120deg));
+}
+SubItem1 {
+  @include section(adjust-hue($part-color, 150deg));
+}
+
+SupplProvision {
+  @include section($part-color);
+  &::before {
+    content: attr(AmendLawNum);
+    display: block;
+    background-color: var(--bg-normal);
+    position: sticky;
+    top: 0;
+    z-index: 4;
+  }
+  &Label {
+    background-color: var(--bg-normal);
+    position: sticky;
+    top: 1.5rem;
+    z-index: 3;
+  }
+  Article {
+    &Title {
+      top: 3.1rem;
+      z-index: 2;
+    }
+  }
+}
+Column {
+  display: block;
+}
+Sentence {
+  display: inline;
+}
+Ruby {
+  display: inline;
+}
+TableStruct {
+  display: table;
+}
+TableRow {
+  display: table-row;
+}
+TableColumn {
+  display: table-cell;
+}
+StyleStruct {
+  display: none;
+}

@@ -1,0 +1,6 @@
+scripts:
+  static_serve: deno run --allow-net --allow-read https://deno.land/std@0.125.0/http/file_server.ts docs
+  install_fresh: deno install -A -f --no-check -n fresh https://raw.githubusercontent.com/lucacasonato/fresh/main/cli.ts
+  server:
+    - fresh manifest 
+    - deno run -A --watch --no-check main.ts
