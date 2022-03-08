@@ -16,7 +16,7 @@ export function elemToPath(el: Element) {
   }
   return ret.join("-");
 }
-export function pathToElem(path: string) {
+export function pathToSelector(path: string) {
   const selectors = [];
   const a = path.split("-");
   if (a[0] === "s") {
@@ -30,5 +30,5 @@ export function pathToElem(path: string) {
       selectors.push(`${name}[Num='${v}']`);
     }
   });
-  return document.querySelector(selectors.join(" ")) as HTMLElement;
+  return selectors.join(" ");
 }

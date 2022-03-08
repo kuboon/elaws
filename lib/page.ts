@@ -1,4 +1,4 @@
-import { elemToPath, pathToElem } from "./path.ts";
+import { elemToPath, pathToSelector } from "./path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 let share: HTMLElement;
@@ -34,7 +34,7 @@ function onClick(ev: Event) {
       path,
       `/${document.location.pathname.split("/")[1]}/${path}`,
     );
-    select(pathToElem(path)!);
+    select(document.querySelector(pathToSelector(path))!);
     return;
   }
   const container = getContainer(ev.target as Element);
@@ -58,7 +58,7 @@ function select(el: HTMLElement) {
 function selectByPath() {
   const { pathname } = document.location;
   const path = pathname.split("/")[2];
-  if (path) select(pathToElem(path)!);
+  if (path) select(document.querySelector(pathToSelector(path))!);
 }
 async function prepareXml() {
   const xml = document.querySelector("#xml:empty");
@@ -66,7 +66,9 @@ async function prepareXml() {
     const content = await fetch(
       xml.attributes.getNamedItem("xmlUrl")!.value,
     ).then((res) => res.text());
-    xml.innerHTML = content.replace(/<([^>]+)\/>/g, "<$1></$1>");
+    xml.innerHTML = content.slice(
+      `<?xml version="1.0" encoding="UTF-8"?>`.length,
+    );
   }
   selectByPath();
 }

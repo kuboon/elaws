@@ -1,72 +1,23 @@
-// deno-lint-ignore-file no-explicit-any
-import { Handler, jmespath, pug, xmlParse } from "../server_deps.ts";
+import { pathToSelector } from "../lib/path.ts";
+import { Handler, JSDOM, pug } from "../server_deps.ts";
 
 const baseUrl = "https://elaws.kbn.one";
 // const blockElems = ["Part", "Chapter", "Section", "Article", "Paragraph", "Item", "Subitem1"]
-const blockElems = ["Article", "Paragraph", "Item", "Subitem1"];
 const page = pug.compileFile("data/page.pug", {});
 
-type LawContent = any;
-
-class PathNotFound extends Error {}
-
-function selectByPath(json: LawContent, path: string) {
-  const query = [];
-  const a = path.split("-");
-  if (a[0] === "s") {
-    a.shift();
-    query.push(
-      `SupplProvision[?(@.@_AmendLawNum=="${decodeURIComponent(a.shift()!)}")]`,
-    );
-  } else {
-    query.push("MainProvision[0]");
-  }
-  a.forEach((v, i) => {
-    if (v == "0") return;
-    const name = blockElems[i];
-    if (!name) throw PathNotFound;
-    query.push(`${name}[?@_Num == ['${v}']]`);
-  });
-  const q = query.join(".");
-  try {
-    console.log(q, json.MainProvision[0].Paragraph[0]);
-    const ret = jmespath.search(json, q);
-    if (ret.length == 0) throw "PathNotFound";
-    if (ret.length > 1) {
-      console.error("path is not uniq", path, q, JSON.stringify(ret[2]));
-    }
-    return ret[0];
-  } catch (e) {
-    console.error("jsonpath error", e);
-  }
+function rootDescription(dom: HTMLDocument) {
+  const enact = dom.querySelector("EnactStatement");
+  if (enact) return getSentence(enact);
+  const preamble = dom.querySelector("Preamble");
+  return preamble ? getSentence(preamble) : "";
+  // if (json.EnactStatement) return getSentence(json.EnactStatement);
+  // if (json.Preamble) {
+  //   return getSentence(json.Preamble);
+  // }
+  // return "";
 }
-function* searchJson(
-  json: LawContent,
-  key: string | null,
-): Generator<any, void, void> {
-  for (const k in json) {
-    if (!key && k[0] == "@") continue;
-    if (typeof json[k] === "object") yield* searchJson(json[k], key);
-    else if (k == key || !key) yield json[k];
-  }
-}
-function rootDescription(json: any) {
-  if (json.EnactStatement) return getSentence(json.EnactStatement);
-  if (json.Preamble) {
-    return getSentence(json.Preamble);
-  }
-  return "";
-}
-function getSentence(json: LawContent) {
-  const it = searchJson(json, null);
-  let buf = "";
-  let c = it.next();
-  while (!c.done) {
-    buf += (buf == "" ? "" : " ") + c.value;
-    if (buf.length > 100) return buf;
-    c = it.next();
-  }
-  return buf;
+function getSentence(elem: Element) {
+  return elem.textContent?.replaceAll(/\s+/g, " ");
 }
 function articleNum(path: string) {
   const a = path.split("-");
@@ -89,18 +40,8 @@ export const handler: Handler = async (req, _ctx) => {
   try {
     const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
     const xml = (await fetch(apiUrl).then((x) => x.text()));
-    const fullJson = xmlParse(xml, {
-      textNodeName: "_text",
-      ignoreAttributes: false,
-      arrayMode: "strict",
-    });
-    if (fullJson.DataRoot[0].Result[0].Code[0] != 0) {
-      return new Response(null, { status: 404 });
-    }
-    const root = fullJson.DataRoot[0];
-    const json = root.ApplData[0].LawFullText[0].Law[0].LawBody[0];
-    let title = json.LawTitle[0];
-    if (title._text) title = title._text[0];
+    const dom = new JSDOM(xml).window.document;
+    const title = dom.querySelector("LawTitle")?.textContent;
     const source = lawNum[0] === "%"
       ? apiUrl
       : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
@@ -108,20 +49,21 @@ export const handler: Handler = async (req, _ctx) => {
     headers["Cache-Control"] = "s-maxage=3600, stale-while-revalidate";
     headers["Content-Type"] = "application/xhtml+xml;charset=UTF-8";
     if (!path || path === "") {
-      const description = rootDescription(json);
+      const description = rootDescription(dom);
       console.log("no path", headers);
       return new Response(
         page({
           url: `${baseUrl}/${lawNum}`,
           source,
-          xml: xml.replace(`<?xml version="1.0" encoding="UTF-8"?>`, ""),
+          xml: xml.slice(`<?xml version="1.0" encoding="UTF-8"?>`.length),
           title,
           description,
         }),
         { headers },
       );
     }
-    const target = selectByPath(json, path);
+    const selector = pathToSelector(path);
+    const target = dom.querySelector(selector);
     const description = target ? getSentence(target) : "";
     return new Response(
       page({
@@ -131,7 +73,7 @@ export const handler: Handler = async (req, _ctx) => {
         title: title + articleNum(path),
         description,
       }),
-      headers,
+      { headers },
     );
   } catch (e) {
     if (e === "PathNotFound") {

@@ -1,7 +1,7 @@
 html {
   --color-normal: hsl(0, 0%, 0%);
   --bg-normal: hsl(0, 0%, 100%);
-  @media (prefers-color-scheme: daaark) {
+  @media (prefers-color-scheme: dark) {
     --color-normal: hsl(0, 0%, 100%);
     --bg-normal: hsl(0, 0%, 0%);  
   }
@@ -11,19 +11,15 @@ html {
     font: -apple-system-body;
   }
 }
-@font-face {
-    font-family: minmoji;
-    src: url('https://minmoji.ucda.jp/fontseot/https%3A__elaws.kbn.one');
-    src: local('minmoji'),
-        url('https://minmoji.ucda.jp/fontswoff/https%3A__elaws.kbn.one') format('woff'),
-        url('https://minmoji.ucda.jp/fonts/https%3A__elaws.kbn.one') format('opentype');
-}
 
 body {
   font-family: minmoji;
   font-size: 16px;
   line-height: 1.6;
   margin: 10px;
+}
+ul.list {
+  padding-inline-start: 20px;
 }
 #title {
   a {

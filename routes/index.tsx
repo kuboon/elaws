@@ -4,20 +4,24 @@
 import {
   h,
   Fragment,
-  Head
+  Head,
+PageProps
 } from '../client_deps.ts'
 import LawList from "../islands/LawList.tsx";
-import { xmlParse } from "../server_deps.ts";
+import { lawList } from "../lib/lawList.ts";
 import { LawItem } from "../lib/types.ts";
+import { Handler } from "../server_deps.ts";
 
-// const lawList = await fetch("https://elaws.e-gov.go.jp/api/1/lawlists/1")
-//   .then((x) => x.text())
-//   .then((xml) => {
-//     return xmlParse(xml).DataRoot.ApplData.LawNameListInfo as LawItem[];
-//   });
-const lawList: LawItem[] = []
+interface PageInfo {
+  fullList: LawItem[];
+}
 
-export default function Home () {
+export const handler: Handler<PageInfo> = async (_req, ctx) => {
+  const data = {fullList: await lawList()}
+  return ctx.render(data)
+}
+export default function Home (props: PageProps<PageInfo>) {
+  const lawList: LawItem[] = props.data.fullList
   const items = [
     {href: '321CONSTITUTION', name: '憲法' },
     {href: '129AC0000000089', name: '民法' },
@@ -50,6 +54,7 @@ export default function Home () {
         <link rel='icon' type='image/png' href='/favicon.56088456.png' />
         <link rel='mask-icon' href='/favicon.e2a89832.svg' />
         <link rel='icon' type='image/svg+xml' href='/favicon.e2a89832.svg' />
+        <link rel='stylesheet' href='/style.css' />
       </Head>
       <h1>日本法令引用 URL</h1>
       <div id='popular'>

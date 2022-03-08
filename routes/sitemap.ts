@@ -1,8 +1,8 @@
-import { lawListP } from "../lib/lawList.ts";
-import { HandlerContext } from "../server_deps.ts";
+import { lawList } from "../lib/lawList.ts";
+import { Handler } from "../server_deps.ts";
 
-export const handler = async (_ctx: HandlerContext): Promise<Response> => {
-  const text = (await lawListP).map((x) =>
+export const handler: Handler = async (_ctx) => {
+  const text = (await lawList()).map((x) =>
     `https://elaws.kbn.one/${encodeURI(x.LawId)}`
   ).join("\n");
   return new Response(text, {
