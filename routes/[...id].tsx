@@ -6,7 +6,12 @@ import { Handler, JSDOM, pugCompile } from "../server_deps.ts";
 import { Fragment, h, Head, PageConfig, PageProps } from "../client_deps.ts";
 
 const baseUrl = "https://elaws.kbn.one";
-const page = pugCompile(Deno.readTextFileSync("data/page.pug"), {});
+let page: Function;
+try {
+  page = pugCompile(Deno.readTextFileSync("data/page.pug"), {});
+} catch {
+  page = () => {};
+}
 
 function rootDescription(dom: Document) {
   const enact = dom.querySelector("EnactStatement");
