@@ -1,10 +1,9 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
-import { PageConfig } from "../fresh/src/runtime/types.ts";
 import { cachedFetch } from "../lib/cache.ts";
 import { pathToSelector } from "../lib/path.ts";
 import { Handler, JSDOM, pugCompile } from "../server_deps.ts";
-import { Fragment, h, Head, PageProps } from "../client_deps.ts";
+import { Fragment, h, Head, PageConfig, PageProps } from "../client_deps.ts";
 
 const baseUrl = "https://elaws.kbn.one";
 const page = pugCompile(Deno.readTextFileSync("data/page.pug"), {});
