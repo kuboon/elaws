@@ -3,4 +3,4 @@ scripts:
   install_fresh: deno install -A -f --no-check -n fresh https://raw.githubusercontent.com/lucacasonato/fresh/main/cli.ts
   server:
     - fresh manifest 
-    - deno run -A --watch --no-check main.ts
+    - deno run -A --watch --no-check --import-map import_map.json main.ts

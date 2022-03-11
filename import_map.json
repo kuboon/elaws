@@ -1,1 +1,6 @@
-{}
+{
+  "imports": {
+    "fresh/local": "./fresh/",
+    "fresh/": "https://raw.githubusercontent.com/lucacasonato/fresh/main/"
+  }
+}
