@@ -61,10 +61,10 @@ function selectByPath() {
   if (path) select(document.querySelector(pathToSelector(path))!);
 }
 async function prepareXml() {
-  const xml = document.querySelector("#xml:empty");
+  const xml = document.querySelector("#xml:empty") as HTMLElement;
   if (xml) {
     const content = await fetch(
-      xml.attributes.getNamedItem("xmlUrl")!.value,
+      xml.dataset.xmlurl!,
     ).then((res) => res.text());
     xml.innerHTML = content.slice(
       `<?xml version="1.0" encoding="UTF-8"?>`.length,
