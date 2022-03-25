@@ -1,10 +1,10 @@
 import { Handler } from "../server_deps.ts";
-import { esbuild } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
+import { esbuild, denoPlugin } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
 
 const absWorkingDir = Deno.cwd();
 export const handler: Handler = async (_req, _ctx) => {
   const entryPoints: Record<string, string> = {
-    "page": "lib/page.ts",
+    "page": new URL("../lib/page.ts", import.meta.url).href,
   };
   const bundle = await esbuild.build({
     bundle: true,
@@ -18,6 +18,7 @@ export const handler: Handler = async (_req, _ctx) => {
     absWorkingDir,
     outfile: "",
     platform: "neutral",
+    plugins: [denoPlugin()],
     splitting: true,
     target: ["chrome96", "firefox95", "safari14"],
     treeShaking: true,
