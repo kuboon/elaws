@@ -16,19 +16,28 @@ export function elemToPath(el: Element) {
   }
   return ret.join("-");
 }
-export function pathToSelector(path: string) {
-  const selectors = [];
+export type DomQuery = {
+  name: string
+  key?: string
+  val?: string
+}
+export function pathToArray(path: string) {
+  const selectors: DomQuery[] = [];
   const a = path.split("-");
   if (a[0] === "s") {
     a.shift();
-    selectors.push(`SupplProvision[AmendLawNum='${a.shift()}']`);
+    selectors.push({name: 'SupplProvision', key: 'AmendLawNum', val: a.shift()!});
   }
   a.forEach((v, i) => {
     if (v == "0") return;
     const name = blockElems[i];
     if (i != 0 || name) {
-      selectors.push(`${name}[Num='${v}']`);
+      selectors.push({name, key: 'Num',  val: v})
     }
   });
-  return selectors.join(" ");
+  return selectors;
+}
+export function pathToSelector(path: string) {
+  const arr = pathToArray(path)
+  return arr.map(({name, key, val})=>`${name}[${key}='${val}']`).join(" ")
 }

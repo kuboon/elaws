@@ -1,20 +1,11 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 import { cachedFetch } from "../lib/cache.ts";
-import { pathToSelector } from "../lib/path.ts";
-import { Handler, JSDOM, renderToString } from "../server_deps.ts";
+import { Handler, renderToString } from "../server_deps.ts";
 import { Fragment, h, Head, PageConfig, PageProps } from "../client_deps.ts";
+import LawXml from "../lib/LawXmlFxp.ts";
 
 const baseUrl = "https://elaws.kbn.one";
-function rootDescription(dom: Document) {
-  const enact = dom.querySelector("EnactStatement");
-  if (enact) return getSentence(enact);
-  const preamble = dom.querySelector("Preamble");
-  return preamble ? getSentence(preamble) : "";
-}
-function getSentence(elem: Element) {
-  return elem.textContent?.replaceAll(/\s+/g, " ");
-}
 function articleNum(path: string) {
   const a = path.split("-");
   // const kanji = "〇一二三四五六七八九"
@@ -43,18 +34,18 @@ export const handler: Handler = async (_req, ctx) => {
   }
   const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
   const xml = await cachedFetch(apiUrl);
-  const dom = new JSDOM(xml).window.document;
-  if (dom.querySelector("Result code").textContent !== "0") {
+  const lawXml = new LawXml(xml)
+  if (!lawXml.isOk()) {
     return ctx.render(<p>ご指定の法律IDに該当がありません。</p>);
   }
-  const title = dom.querySelector("LawTitle")?.textContent;
+  const title = lawXml.title();
   const source = lawNum[0] === "%"
     ? apiUrl
     : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
   const headers: Record<string, string> = {};
   headers["Cache-Control"] = "s-maxage=3600, stale-while-revalidate";
   if (!path || path === "") {
-    const description = rootDescription(dom);
+    const description = lawXml.rootDescription();
     const rendered = render({
       url: `${baseUrl}/${lawNum}`,
       source,
@@ -64,10 +55,8 @@ export const handler: Handler = async (_req, ctx) => {
     });
     return rendered;
   }
-  const selector = pathToSelector(path);
-  const target = dom.querySelector(selector);
-  if (target) {
-    const description = getSentence(target);
+  const description = lawXml.getSentenceFrom(path)
+  if (description) {
     const rendered = render({
       url: `${baseUrl}/${lawNum}/${path}`,
       source,
