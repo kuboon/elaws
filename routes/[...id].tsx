@@ -14,6 +14,7 @@ function articleNum(path: string) {
     a.shift();
     a.shift();
   }
+  if(!a[0]) return ''
   const jou = a[0] === "0" ? "前文" : `第${a[0]}条`;
   return ` ${fusoku || ""}${jou}${a[1] || ""}`;
 }
@@ -38,7 +39,7 @@ export const handler: Handler = async (_req, ctx) => {
   if (!lawXml.isOk()) {
     return ctx.render(<p>ご指定の法律IDに該当がありません。</p>);
   }
-  const title = lawXml.title();
+  const title = lawXml.title() || '';
   const source = lawNum[0] === "%"
     ? apiUrl
     : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
@@ -90,13 +91,15 @@ function render(data: PageData) {
   return new Response(body, { headers });
 }
 function Page(data: PageData) {
+  const mrkdwn = `# ${data.title}\n${data.description}`
+  const og_image = `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`
   return (
     <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
       <head>
         <link rel="stylesheet" href="/style.css" />
         <title>{data.title} - 日本法令引用 URL</title>
         <meta property="og:site_name" content="日本法令引用 URL" />
-        <meta property="og:title" content="日本国憲法 前文1" />
+        <meta property="og:title" content={data.title} />
         <meta
           property="og:description"
           content={data.description}
@@ -107,19 +110,19 @@ function Page(data: PageData) {
         />
         <meta
           property="og:image"
-          content="https://og.kbn.one/%23%20日本国憲法 前文1%0A 日本国民は、正当に選挙された国会における代表者を通じて行動し、われらとわれらの子孫のために、諸国民との協和による成果と、わが国全土にわたつて自由のもたらす恵沢を確保し、政府の行為によつて再び戦争の惨禍が起ることのないやうにすることを決意し、ここに主権が国民に存することを宣言し、この憲法を確定する。そもそも国政は、国民の厳粛な信託によるものであつて、その権威は国民に由来し、その権力は国民の代表者がこれを行使し、その福利は国民がこれを享受する。これは人類普遍の原理であり、この憲法は、かかる原理に基くものである。われらは、これに反する一切の憲法、法令及び詔勅を排除する。 .png?md=1"
+          content={og_image}
         />
         <meta property="og:image:width" content="833" />
         <meta property="og:image:height" content="476" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="日本国憲法 前文1" />
+        <meta name="twitter:title" content={data.title} />
         <meta
           name="twitter:description"
-          content=" 日本国民は、正当に選挙された国会における代表者を通じて行動し、われらとわれらの子孫のために、諸国民との協和による成果と、わが国全土にわたつて自由のもたらす恵沢を確保し、政府の行為によつて再び戦争の惨禍が起ることのないやうにすることを決意し、ここに主権が国民に存することを宣言し、この憲法を確定する。そもそも国政は、国民の厳粛な信託によるものであつて、その権威は国民に由来し、その権力は国民の代表者がこれを行使し、その福利は国民がこれを享受する。これは人類普遍の原理であり、この憲法は、かかる原理に基くものである。われらは、これに反する一切の憲法、法令及び詔勅を排除する。 "
+          content={data.description}
         />
         <meta
           name="twitter:image"
-          content="https://og.kbn.one/%23%20日本国憲法 前文1%0A 日本国民は、正当に選挙された国会における代表者を通じて行動し、われらとわれらの子孫のために、諸国民との協和による成果と、わが国全土にわたつて自由のもたらす恵沢を確保し、政府の行為によつて再び戦争の惨禍が起ることのないやうにすることを決意し、ここに主権が国民に存することを宣言し、この憲法を確定する。そもそも国政は、国民の厳粛な信託によるものであつて、その権威は国民に由来し、その権力は国民の代表者がこれを行使し、その福利は国民がこれを享受する。これは人類普遍の原理であり、この憲法は、かかる原理に基くものである。われらは、これに反する一切の憲法、法令及び詔勅を排除する。 .png?md=1"
+          content={og_image}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/favicon.png" />

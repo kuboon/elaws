@@ -9,8 +9,12 @@ type JSONValue =
     | Array<JSONValue>;
 
 function getSentence(json: JSONValue) {
-  const str = (walk(json, {name: '_text'}) as string[])[0]
-  return str.replaceAll(/\s+/g, " ");
+  if(typeof(json)==='string') return json
+  const text = walk(json, {name: '_text'}) as string
+  if(text){
+    return text.replaceAll(/\s+/g, " ");
+  }
+  console.log(json)
 }
 function walk(json: JSONValue, q: DomQuery): JSONValue | undefined {
   if(Array.isArray(json)){
@@ -24,7 +28,9 @@ function walk(json: JSONValue, q: DomQuery): JSONValue | undefined {
         if(!q.key) return val
         if(Array.isArray(val)){
           for(const v of val){
-            if(typeof(v) === 'object' && (v as any)['__' + q.key][0] === q.val){
+            if(typeof(v) !== 'object') continue
+            const attr = (v as any)['__' + q.key]
+            if(attr && attr[0] === q.val){
               return v
             }
           }
@@ -53,7 +59,8 @@ export default class LawXml {
     return this.querySelector([{name: 'Result'}, {name: 'Code'}]) === 0;
   }
   title() {
-    return this.querySelector([{name: 'LawTitle'}]);
+    const t = this.querySelector([{name: 'LawTitle'}])
+    return t && getSentence(t);
   }
   rootDescription() {
     const enact = this.querySelector([{name: 'EnactStatement'}]);

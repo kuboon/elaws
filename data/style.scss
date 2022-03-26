@@ -1,22 +1,32 @@
-html {
-  --color-normal: hsl(0, 0%, 0%);
-  --bg-normal: hsl(0, 0%, 100%);
+:root {
+  --color: black;
+  --bg: white;
+  --bg-selected: #fcc;
   @media (prefers-color-scheme: dark) {
-    --color-normal: hsl(0, 0%, 100%);
-    --bg-normal: hsl(0, 0%, 0%);  
+    --color: white;
+    --bg: black;
+    --bg-selected: #933;
   }
 }
+
 @supports (font: -apple-system-body) {
   html {
     font: -apple-system-body;
   }
 }
-
+@font-face {
+  font-family: UDPGothic;
+  src: local("BIZ UDPGothic"),url("/BIZUDPGothic-Regular.ttf") format("ttf")
+}
+html {
+  font-family: UDPGothic;
+}
 body {
-  font-family: minmoji;
   font-size: 16px;
   line-height: 1.6;
   margin: 10px;
+  color: var(--color);
+  background-color: var(--bg);
 }
 ul.list {
   padding-inline-start: 20px;
@@ -24,8 +34,10 @@ ul.list {
 #title {
   a {
     text-decoration: none;
+    color: var(--color)
   }
 }
+// top page
 ul.inline {
   padding: 0;
   li {
@@ -46,7 +58,7 @@ ul.inline {
   }
 }
 .selected {
-  background-color: #fcc;
+  background-color: var(--bg-selected);
   position: relative;
   * {
     background-color: inherit;
@@ -95,30 +107,34 @@ LawTitle {
   border-bottom: dotted black 3px;
 }
 
-PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
+LawTitle, PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
   position: sticky;
-  background-color: var(--bg-normal);
+  background-color: var(--bg);
   top: 0;
-  z-index: 4;
+  z-index: 10;
 }
 Part {
+  &Title {
+    top: 4rem;
+    z-index: 9;
+  }
   Chapter {
     &Title {
-      top: 2.9rem;
-      z-index: 3;
+      top: 6.9rem;
+      z-index: 8;
     }
     ArticleTitle {
-      top: 5rem;
-      z-index: 1;
+      top: 9rem;
+      z-index: 7;
     }
     Section {
       &Title {
         top: 5rem;
-        z-index: 2;
+        z-index: 6;
       }
       ArticleTitle {
         top: 6.5rem;
-        z-index: 1;
+        z-index: 5;
       }
     }
   }
@@ -162,14 +178,15 @@ SupplProvision {
   @include section($part-color);
   &::before {
     content: attr(AmendLawNum);
-    display: block;
-    background-color: var(--bg-normal);
+    display: block;;
+    background-color: var(--bg);
     position: sticky;
     top: 0;
     z-index: 4;
   }
   &Label {
-    // background-color: var(--bg-normal);
+    background-color: var(--bg);
+    font-size: 1.5rem;
     position: sticky;
     top: 1.5rem;
     z-index: 3;
