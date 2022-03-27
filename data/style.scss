@@ -102,64 +102,52 @@ $part-color: hsl(0, 50%, 50%);
   margin-bottom: 1rem;
   padding-left: 6px;
 }
-LawTitle {
-  font-size: 2.5em;
-  border-bottom: dotted black 3px;
-}
 
 LawTitle, PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
   position: sticky;
   background-color: var(--bg);
+}
+
+Law {
+  --law-title-h: 4.1rem;
+  --part-title-height: 0rem;
+  --chapter-title-h: 0rem;
+  --section-title-h: 0rem;
+}
+LawTitle {
+  font-size: 2.5em;
+  border-bottom: dotted var(--color) 3px;
   top: 0;
-  z-index: 10;
-}
-Part {
-  &Title {
-    top: 4rem;
-    z-index: 9;
-  }
-  Chapter {
-    &Title {
-      top: 6.9rem;
-      z-index: 8;
-    }
-    ArticleTitle {
-      top: 9rem;
-      z-index: 7;
-    }
-    Section {
-      &Title {
-        top: 5rem;
-        z-index: 6;
-      }
-      ArticleTitle {
-        top: 6.5rem;
-        z-index: 5;
-      }
-    }
-  }
-}
-Chapter {
-  SectionTitle, ArticleTitle {
-    top: 2.3rem;
-    z-index: 2;
-  }
+  z-index: 100;
 }
 
 Part {
+  --part-title-height: 3rem;
   @include section($part-color);
   &Title {
+    z-index: 90;
+    top: calc(var(--law-title-h));
     font-size: 2rem;
   }
 }
 Chapter {
+  --chapter-title-h: 2.2rem;
   @include section(adjust-hue($part-color, 30deg));
   &Title {
+    z-index: 80;
+    top: calc(var(--law-title-h) + var(--part-title-height));
     font-size: 1.5rem;
   }
 }
+Section {
+  --section-title-h: 2rem;
+}
 Article {
   @include section(adjust-hue($part-color, 60deg));
+  &Title {
+    z-index: 60;
+    top: calc(var(--law-title-h) + var(--part-title-height) + var(--chapter-title-h));
+  }
 }
 Paragraph, Item, SubItem1 {
   @include flex-container;
