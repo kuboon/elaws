@@ -6,6 +6,9 @@
     --color: white;
     --bg: black;
     --bg-selected: #933;
+    a {
+      color: #bbf;
+    }
   }
 }
 
@@ -28,9 +31,6 @@ body {
   color: var(--color);
   background-color: var(--bg);
 }
-ul.list {
-  padding-inline-start: 20px;
-}
 #title {
   a {
     text-decoration: none;
@@ -38,6 +38,9 @@ ul.list {
   }
 }
 // top page
+ul.list {
+  padding-inline-start: 20px;
+}
 ul.inline {
   padding: 0;
   li {
