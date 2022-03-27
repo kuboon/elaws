@@ -10,33 +10,33 @@ type JSONValue =
 
 function getSentence(json: JSONValue) {
   if(typeof(json)==='string') return json
-  const text = walk(json, {name: '_text'}) as string
-  if(text){
-    return text.replaceAll(/\s+/g, " ");
-  }
-  console.log(json)
+  const all = [] as string[]
+  walk(json, {name: '#text'}, all) as string
+  const text = all.join(' ')
+  return text.replaceAll(/\s+/g, " ");
 }
-function walk(json: JSONValue, q: DomQuery): JSONValue | undefined {
+function walk(json: JSONValue, q: DomQuery, all?: string[]): JSONValue | undefined {
   if(Array.isArray(json)){
     for(const j of json){
-      const ret = walk(j as JSONValue, q)
-      if(ret) return ret
+      const ret = walk(j as JSONValue, q, all)
+      if(ret && !all) return ret
     }
   } else if(typeof(json)==='object'){
     for(const [key, val] of Object.entries(json)){
       if (key === q.name) {
-        if(!q.key) return val
-        if(Array.isArray(val)){
-          for(const v of val){
-            if(typeof(v) !== 'object') continue
-            const attr = (v as any)['__' + q.key]
-            if(attr && attr[0] === q.val){
-              return v
-            }
+        if(!q.key) {
+          if(all && typeof val === 'string') {
+            all.push(val)
+            return
           }
+          return val
         }
+        if((json[':@'] as Record<string, string>)['@_' + q.key] === q.val){
+          return val
+        }
+        return
       }
-      const ret = walk(val, q)
+      const ret = walk(val, q, all)
       if(ret) return ret
     }
   }
@@ -44,7 +44,7 @@ function walk(json: JSONValue, q: DomQuery): JSONValue | undefined {
 export default class LawXml {
   public dom: JSONValue;
   constructor(public readonly xml: string) {
-    this.dom = xmlParser.parse(xml);
+    this.dom = xmlParser.parse(xml)[0].DataRoot;
   }
   querySelector(qArr: DomQuery[]) {
     let json = this.dom
@@ -53,10 +53,10 @@ export default class LawXml {
       if(!ret) return
       json = ret
     }
-    return Array.isArray(json) ? json[0] : json;
+    return getSentence(json);
   }
   isOk() {
-    return this.querySelector([{name: 'Result'}, {name: 'Code'}]) === 0;
+    return this.querySelector([{name: 'Result'}, {name: 'Code'}]) === '0';
   }
   title() {
     const t = this.querySelector([{name: 'LawTitle'}])

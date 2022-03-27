@@ -8,7 +8,15 @@ export async function lawList() {
       x,
     ) => x.text());
     const parsed = xmlParser.parse(xml);
-    cached = parsed.DataRoot[0].ApplData[0].LawNameListInfo as LawItem[];
+    cached = parsed[1].DataRoot[1].ApplData.map((x: any) => {
+      const info = x.LawNameListInfo
+      if (!info) return;
+      return {
+        LawId: info[0].LawId[0]['#text'],
+        LawName: info[1].LawName[0]['#text'],
+        PromulgationDate: info[3].PromulgationDate[0]['#text'],
+      }
+    }).filter((x: unknown) => x) as LawItem[];
   }
   return cached;
 }

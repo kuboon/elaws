@@ -5,8 +5,10 @@ export { JSDOM } from "https://esm.sh/jsdom";
 
 import { XMLParser } from "https://esm.sh/fast-xml-parser@4";
 export const xmlParser = new XMLParser({
-  textNodeName: "_text",
   ignoreAttributes: false,
-  attributeNamePrefix: "__",
   isArray: () => true,
+  preserveOrder: true,
+  processEntities: false,
+  parseAttributeValue: false,
+  parseTagValue: false
 });
