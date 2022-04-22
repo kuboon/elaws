@@ -11,10 +11,11 @@ export async function lawList() {
     cached = parsed[1].DataRoot[1].ApplData.map((x: any) => {
       const info = x.LawNameListInfo
       if (!info) return;
+      console.log(info[3])
       return {
         LawId: info[0].LawId[0]['#text'],
         LawName: info[1].LawName[0]['#text'],
-        PromulgationDate: info[3].PromulgationDate[0]['#text'],
+        PromulgationDate: info[3].PromulgationDate[0]?.['#text'],
       }
     }).filter((x: unknown) => x) as LawItem[];
   }
