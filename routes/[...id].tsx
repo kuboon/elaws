@@ -14,7 +14,7 @@ function articleNum(path: string) {
     a.shift();
     a.shift();
   }
-  if(!a[0]) return ''
+  if (!a[0]) return "";
   const jou = a[0] === "0" ? "前文" : `第${a[0]}条`;
   return ` ${fusoku || ""}${jou}${a[1] || ""}`;
 }
@@ -35,11 +35,11 @@ export const handler: Handler = async (_req, ctx) => {
   }
   const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
   const xml = await cachedFetch(apiUrl);
-  const lawXml = new LawXml(xml)
+  const lawXml = new LawXml(xml);
   if (!lawXml.isOk()) {
     return ctx.render(<p>ご指定の法律IDに該当がありません。</p>);
   }
-  const title = lawXml.title() || '';
+  const title = lawXml.title() || "";
   const source = lawNum[0] === "%"
     ? apiUrl
     : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
@@ -56,7 +56,7 @@ export const handler: Handler = async (_req, ctx) => {
     });
     return rendered;
   }
-  const description = lawXml.getSentenceFrom(path)
+  const description = lawXml.getSentenceFrom(path);
   if (description) {
     const rendered = render({
       url: `${baseUrl}/${lawNum}/${path}`,
@@ -91,10 +91,14 @@ function render(data: PageData) {
   return new Response(body, { headers });
 }
 function Page(data: PageData) {
-  const mrkdwn = `# ${data.title}\n${data.description}`
-  const og_image = `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`
+  const mrkdwn = `# ${data.title}\n${data.description}`;
+  const og_image = `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`;
   return (
-    <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+    <html
+      /* @ts-expect-error */
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="ja"
+    >
       <head>
         <link rel="stylesheet" href="/style.css" />
         <title>{data.title} - 日本法令引用 URL</title>
@@ -126,7 +130,12 @@ function Page(data: PageData) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        <link rel="mask-icon" href="/favicon.svg" color="pink" />
+        <link
+          rel="mask-icon"
+          href="/favicon.svg"
+          /* @ts-expect-error */
+          color="pink"
+        />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <script src="/page.js" defer={true} />
       </head>

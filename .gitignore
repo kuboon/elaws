@@ -1,9 +1,2 @@
-node_modules
-public
 .cache
-.now
-iso/
-
-yarn-error.log
-
-.vercel
+.deno_plugins

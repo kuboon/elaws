@@ -1,16 +1,9 @@
-# fresh project
+# 日本法律引用URL
 
-### Usage
+日本の法律を閲覧、引用できるサービス。スマホからも便利。
 
-Start the project:
+[法令API](https://elaws.e-gov.go.jp/apitop/) から法令一覧および法令XMLを取得し、スマホでも見やすい独自のビューで閲覧できます。
 
-```
-deno run -A --watch main.ts
-```
+各条文をタップすると条文へのパーマリンクを取得でき、容易にSNS等へシェアすることが可能です。
 
-After adding, removing, or moving a page in the `routes` or directory, or adding,
-removing, or moving an island in the `islands` directory, run:
-
-```
-fresh manifest
-```
+[fresh](https://github.com/lucacasonato/fresh) で実装されており、 https://deno.com/deploy で動作します。
