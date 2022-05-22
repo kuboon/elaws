@@ -16,6 +16,17 @@ addEventListener("load", () => {
       });
     });
   }
+  const lawTitle = document.querySelector("LawTitle")
+  const intersectionObserver = new IntersectionObserver(function(entries) {
+    if(!entries[0].isIntersecting){
+      const scrollTop = document.body.parentElement.scrollTop
+      lawTitle.classList.add('stuck')
+      document.body.parentElement.scrollTop = scrollTop
+    } else {
+      lawTitle.classList.remove('stuck')
+    }
+  }, {rootMargin: '-1px 0px', threshold: 1})
+  intersectionObserver.observe(lawTitle)
 });
 function getContainer(el: Element) {
   for (const c of containerElems.reverse()) {
