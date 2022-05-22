@@ -1,6 +1,7 @@
 import { Handler } from "../server_deps.ts";
 import { esbuild, denoPlugin } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
 
+let esbuildInitalized: boolean | Promise<void> = false;
 async function ensureEsbuildInialized() {
   if (esbuildInitalized === false) {
     if (Deno.run === undefined) {
