@@ -122,12 +122,15 @@ LawTitle {
   border-bottom: dotted var(--color) 3px;
   top: 0;
   z-index: 100;
-  transition: max-height 1s;
+  transition: max-height 0.5s;
   overflow: hidden;
-  max-height: calc(var(--law-title-h) * 5);
-}
-LawTitle.stuck {
-  max-height: var(--law-title-h);
+  max-height: 100vh;
+  &.stuck {
+    max-height: var(--law-title-h);
+  }
+  &.stuck:hover {
+    max-height: 100vh;
+  }
 }
 
 Part {
