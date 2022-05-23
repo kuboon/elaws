@@ -1,23 +1,7 @@
 import { Handler } from "../server_deps.ts";
 import { esbuild, denoPlugin } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
+import { ensureEsbuildInialized } from "../patch/bundle.ts"
 
-let esbuildInitalized: boolean | Promise<void> = false;
-async function ensureEsbuildInialized() {
-  if (esbuildInitalized === false) {
-    if (Deno.run === undefined) {
-      esbuildInitalized = esbuild.initialize({
-        wasmURL: "https://unpkg.com/esbuild-wasm@0.14.39/esbuild.wasm",
-        worker: false,
-      });
-    } else {
-      esbuild.initialize({});
-    }
-    await esbuildInitalized;
-    esbuildInitalized = true;
-  } else if (esbuildInitalized instanceof Promise) {
-    await esbuildInitalized;
-  }
-}
 export const handler: Handler = async (_req, _ctx) => {
   const entryPoints: Record<string, string> = {
     "page": new URL("../lib/page.ts", import.meta.url).href,
