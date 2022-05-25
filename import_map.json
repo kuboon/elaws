@@ -1,6 +1,4 @@
 {
   "imports":{
-  "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/bundle.ts": "./patch/bundle.ts"
-
   }
 }

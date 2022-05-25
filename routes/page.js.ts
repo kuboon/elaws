@@ -1,7 +1,20 @@
 import { Handler } from "../server_deps.ts";
-import { esbuild, denoPlugin } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
-import { ensureEsbuildInialized } from "../patch/bundle.ts"
+import { denoPlugin } from "https://raw.githubusercontent.com/lucacasonato/fresh/main/src/server/deps.ts";
+import * as esbuild from "https://unpkg.com/esbuild-wasm@0.14.38/esm/browser.js";
 
+let esbuildInitalized: boolean | Promise<void> = false;
+export async function ensureEsbuildInialized() {
+  if (esbuildInitalized === false) {
+    esbuildInitalized = esbuild.initialize({
+      wasmURL: "https://unpkg.com/esbuild-wasm@0.14.38/esbuild.wasm",
+      worker: false,
+    });
+    await esbuildInitalized;
+    esbuildInitalized = true;
+  } else if (esbuildInitalized instanceof Promise) {
+    await esbuildInitalized;
+  }
+}
 export const handler: Handler = async (_req, _ctx) => {
   const entryPoints: Record<string, string> = {
     "page": new URL("../lib/page.ts", import.meta.url).href,
