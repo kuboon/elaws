@@ -1,8 +1,10 @@
 /** @jsx h */
 /** @jsxFrag Fragment */
 import { cachedFetch } from "../lib/cache.ts";
-import { Handler, renderToString } from "../server_deps.ts";
-import { Fragment, h, Head, PageConfig, PageProps } from "../client_deps.ts";
+import { Fragment, h } from "preact";
+// import { Head } from "$fresh/runtime.ts";
+import { Handler, PageProps, RouteConfig } from "$fresh/server.ts";
+import { renderToString } from "preact-render-to-string";
 import LawXml from "../lib/LawXmlFxp.ts";
 
 const baseUrl = "https://elaws.kbn.one";
@@ -191,6 +193,6 @@ export default function renderError(props: PageProps) {
     </html>
   );
 }
-export const config: PageConfig = {
+export const config: RouteConfig = {
   routeOverride: "/:id([^_].+)",
 };

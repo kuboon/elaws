@@ -1,8 +1,8 @@
-export * from "https://raw.githubusercontent.com/lucacasonato/fresh/main/server.ts";
-export { renderToString } from "https://esm.sh/preact-render-to-string@5.1.20?deps=preact@10.6.6";
-export { default as jmespath } from "https://esm.sh/jmespath";
+export * from "$fresh/server.ts";
+export { renderToString } from "preact-render-to-string";
+export { default as jmespath } from "https://esm.sh/jmespath@0.16.0";
 
-import { XMLParser } from "https://esm.sh/fast-xml-parser@4?no-check";
+import { XMLParser } from "https://esm.sh/fast-xml-parser@4.0.7?no-check";
 export const xmlParser = new XMLParser({
   ignoreAttributes: false,
   isArray: () => true,

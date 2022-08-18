@@ -1,4 +1,4 @@
-import {useRef, useCallback, useEffect} from '../client_deps.ts'
+import {useRef, useCallback, useEffect} from 'preact/hooks'
 export default function useDebouncedCallback(
   callback: Function,
   delay: number,
