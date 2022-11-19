@@ -1,7 +1,4 @@
-/** @jsx h */
-/** @jsxFrag Fragment */
 import { LawItem } from "../lib/types.ts";
-import { Fragment, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import useDebouncedCallback from "../lib/useDebouncedCallback.ts";
 

@@ -1,10 +1,7 @@
 /// <reference lib="dom" />
-/** @jsx h */
-/** @jsxFrag Fragment */
 import LawList from "../islands/LawList.tsx";
 import { lawList } from "../lib/lawList.ts";
 import { LawItem } from "../lib/types.ts";
-import { Fragment, h } from "preact";
 import { Head } from "$fresh/runtime.ts";
 import { Handler, PageProps } from "$fresh/server.ts";
 

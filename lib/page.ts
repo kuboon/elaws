@@ -73,15 +73,20 @@ async function prepareXml() {
   selectByPath();
 }
 function observeSticky(){
-  const lawTitle = document.querySelector("LawTitle")
+  const lawTitle: HTMLDivElement = document.querySelector("LawTitle")!
+  let sticking = false
   const intersectionObserver = new IntersectionObserver(function(entries) {
+    if(sticking) return
     if(!entries[0].isIntersecting){
-      const scrollTop = document.body.parentElement.scrollTop
       lawTitle.classList.add('stuck')
-      document.body.parentElement.scrollTop = scrollTop
+      sticking = true
+      setTimeout(()=>{
+        scrollTo({ top: lawTitle.offsetTop, behavior: "smooth" })
+        sticking = false
+      }, 500);
     } else {
       lawTitle.classList.remove('stuck')
     }
-  }, {rootMargin: '-1px 0px', threshold: 1})
+  }, {rootMargin: '-1px 0px 0px 0px', threshold: 1})
   intersectionObserver.observe(lawTitle)
 }
