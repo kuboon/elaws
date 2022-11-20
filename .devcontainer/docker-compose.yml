@@ -1,0 +1,8 @@
+version: '3'
+services:
+  dev:
+    image: mcr.microsoft.com/devcontainers/base:bullseye
+    platform: linux/amd64
+    restart: always
+    working_dir: '/workspace'
+    tty: true

@@ -1,6 +1,9 @@
 {
-	"name": "Debian",
-	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"name": "elaws",
+	"dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "vscode",
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers-contrib/features/deno:1": {}

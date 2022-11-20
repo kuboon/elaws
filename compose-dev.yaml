@@ -1,0 +1,11 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:bullseye
+    platform: linux/amd64
+    init: true
+    name: "elaws-dev"
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+
