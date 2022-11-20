@@ -12,7 +12,7 @@ const LongList = ({ list }: { list: LawItem[] }) => {
   const onClick = (ev: Event) =>
     (ev.target! as Element).classList.toggle("collapse");
   return (
-    <Fragment>
+    <>
       {Object.keys(groups)
         .reverse()
         .map((k) => (
@@ -25,11 +25,11 @@ const LongList = ({ list }: { list: LawItem[] }) => {
             </ul>
           </li>
         ))}
-    </Fragment>
+    </>
   );
 };
 const ShortList = ({ list }: { list: LawItem[] }) => (
-  <Fragment>
+  <>
     {list.map((i) => (
       <li>
         <a href={i.LawId}>
@@ -37,7 +37,7 @@ const ShortList = ({ list }: { list: LawItem[] }) => (
         </a>
       </li>
     ))}
-  </Fragment>
+  </>
 );
 export default function LawList({ fullList }: { fullList: LawItem[] }) {
   const [list, setList] = useState(fullList);
@@ -53,7 +53,7 @@ export default function LawList({ fullList }: { fullList: LawItem[] }) {
     );
   }, [text]);
   return (
-    <Fragment>
+    <>
       <p>
         絞り込み検索{" "}
         <input
@@ -67,6 +67,6 @@ export default function LawList({ fullList }: { fullList: LawItem[] }) {
           ? <LongList list={list} />
           : <ShortList list={list} />}
       </ul>
-    </Fragment>
+    </>
   );
 }
