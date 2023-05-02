@@ -6,4 +6,4 @@
 
 各条文をタップすると条文へのパーマリンクを取得でき、容易にSNS等へシェアすることが可能です。
 
-[fresh](https://github.com/lucacasonato/fresh) で実装されており、 https://deno.com/deploy で動作します。
+[fresh](https://github.com/denoland/fresh) で実装されており、 https://deno.com/deploy で動作します。
