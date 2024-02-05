@@ -3,7 +3,7 @@ import { elemToPath, pathToSelector } from "./path.ts";
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 let share: HTMLElement;
 addEventListener("load", () => {
-  prepareXml().then(observeSticky)
+  prepareXml().then(observeSticky);
   addEventListener("popstate", selectByPath);
   document.addEventListener("click", onClick);
   share = document.querySelector("#share")!;
@@ -72,21 +72,21 @@ async function prepareXml() {
   }
   selectByPath();
 }
-function observeSticky(){
-  const lawTitle: HTMLDivElement = document.querySelector("LawTitle")!
-  let sticking = false
-  const intersectionObserver = new IntersectionObserver(function(entries) {
-    if(sticking) return
-    if(!entries[0].isIntersecting){
-      lawTitle.classList.add('stuck')
-      sticking = true
-      setTimeout(()=>{
-        scrollTo({ top: lawTitle.offsetTop, behavior: "smooth" })
-        sticking = false
+function observeSticky() {
+  const lawTitle: HTMLDivElement = document.querySelector("LawTitle")!;
+  let sticking = false;
+  const intersectionObserver = new IntersectionObserver(function (entries) {
+    if (sticking) return;
+    if (!entries[0].isIntersecting) {
+      lawTitle.classList.add("stuck");
+      sticking = true;
+      setTimeout(() => {
+        scrollTo({ top: lawTitle.offsetTop, behavior: "smooth" });
+        sticking = false;
       }, 500);
     } else {
-      lawTitle.classList.remove('stuck')
+      lawTitle.classList.remove("stuck");
     }
-  }, {rootMargin: '-1px 0px 0px 0px', threshold: 1})
-  intersectionObserver.observe(lawTitle)
+  }, { rootMargin: "-1px 0px 0px 0px", threshold: 1 });
+  intersectionObserver.observe(lawTitle);
 }

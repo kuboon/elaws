@@ -9,5 +9,5 @@ export const xmlParser = new XMLParser({
   preserveOrder: true,
   processEntities: false,
   parseAttributeValue: false,
-  parseTagValue: false
+  parseTagValue: false,
 });
