@@ -49,7 +49,7 @@ function select(el: HTMLElement) {
   share.style.display = "none";
   if (!el) return;
   el.classList.add("selected");
-  scrollTo({ top: el.offsetTop - window.innerHeight / 3, behavior: "smooth" });
+  scrollTo({ top: el.offsetTop - globalThis.innerHeight / 3, behavior: "smooth" });
   if (navigator.share != undefined) {
     el.append(share);
     share.style.display = "block";
@@ -65,7 +65,7 @@ async function prepareXml() {
   if (xml) {
     const content = await fetch(
       xml.dataset.xmlurl!,
-    ).then((res) => res.text());
+    ).then(x => x.text());
     xml.innerHTML = content.slice(
       `<?xml version="1.0" encoding="UTF-8"?>`.length,
     );

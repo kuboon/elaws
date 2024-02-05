@@ -1,4 +1,4 @@
-import { create, LRU } from "https://deno.land/x/dcache/mod.ts";
+import { create, type LRU } from "https://deno.land/x/dcache/mod.ts";
 const lru: LRU<string, string> = create(10);
 
 export async function cachedFetch(url: string) {
