@@ -153,7 +153,7 @@ function Page(data: PageData) {
         <div
           id="xml"
           data-xmlurl={data.xmlUrl}
-          dangerouslySetInnerHTML={{ __html: data.xml! }}
+          dangerouslySetInnerHTML={{ __html: `<xml>${data.xml!}</xml>` }}
         >
         </div>
         <div id="share" style="display: none;">
