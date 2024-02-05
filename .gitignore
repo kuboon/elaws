@@ -1,2 +1,5 @@
 .cache
 .deno_plugins
+
+# Fresh build directory
+_fresh/

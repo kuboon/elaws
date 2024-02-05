@@ -4,9 +4,7 @@ import { LawItem } from "./types.ts";
 let cached: LawItem[] | undefined;
 export async function lawList() {
   if (!cached) {
-    const xml = await fetch("https://elaws.e-gov.go.jp/api/1/lawlists/1").then((
-      x,
-    ) => x.text());
+    const xml = await fetch("https://elaws.e-gov.go.jp/api/1/lawlists/1").then(x => x.text());
     const parsed = xmlParser.parse(xml);
     cached = parsed[1].DataRoot[1].ApplData.map((x: any) => {
       const info = x.LawNameListInfo
