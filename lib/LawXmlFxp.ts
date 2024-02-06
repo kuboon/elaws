@@ -48,7 +48,12 @@ function walk(
 export default class LawXml {
   public dom: JSONValue;
   constructor(public readonly xml: string) {
-    this.dom = xmlParser.parse(xml)[0].DataRoot;
+    try {
+      this.dom = xmlParser.parse(xml)[0].DataRoot;
+    } catch (e) {
+      console.error(xml.slice(0, 1000));
+      throw e;
+    }
   }
   querySelector(qArr: DomQuery[]) {
     let json = this.dom;
