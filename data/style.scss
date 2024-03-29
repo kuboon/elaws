@@ -38,9 +38,6 @@ body {
   }
 }
 // top page
-ul.list {
-  padding-inline-start: 20px;
-}
 ul.inline {
   padding: 0;
   li {
@@ -60,6 +57,11 @@ ul.inline {
     display: none;
   }
 }
+.hidden {
+  display: none;
+}
+
+// law page
 .selected {
   background-color: var(--bg-selected);
   position: relative;

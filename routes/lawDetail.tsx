@@ -1,8 +1,11 @@
+/** @jsx jsx */
+/** @jsxFrag Fragment */
 import { cachedFetch } from "../lib/cache.ts";
-// import { Head } from "$fresh/runtime.ts";
-import { Handler, PageProps, RouteConfig } from "$fresh/server.ts";
-import { renderToString } from "preact-render-to-string";
 import LawXml from "../lib/LawXmlFxp.ts";
+
+import { type Context } from "hono/mod.ts";
+import { jsx, Fragment } from 'hono/middleware.ts'
+import { html, raw } from 'hono/helper.ts'
 
 const baseUrl = "https://elaws.kbn.one";
 function articleNum(path: string) {
@@ -27,17 +30,13 @@ type PageData = {
   description?: string;
 };
 
-export const handler: Handler = async (_req, ctx) => {
-  const [lawNum, path] = ctx.params.id.split("/");
-  if (lawNum.startsWith("favicon")) {
-    return new Response(null, { status: 404 });
-  }
+export const lawDetail = async (c: Context, lawNum?: string, path?: string) => {
+  if (!lawNum) return renderError(c)
   const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
   const xml = await cachedFetch(apiUrl);
   const lawXml = new LawXml(xml);
-  if (!lawXml.isOk()) {
-    return ctx.render(<p>ご指定の法律IDに該当がありません。</p>);
-  }
+  if (!lawXml.isOk()) return renderError(c);
+
   const title = lawXml.title() || "";
   const source = lawNum[0] === "%"
     ? apiUrl
@@ -46,7 +45,7 @@ export const handler: Handler = async (_req, ctx) => {
   headers["Cache-Control"] = "s-maxage=3600, stale-while-revalidate";
   if (!path || path === "") {
     const description = lawXml.rootDescription();
-    const rendered = render({
+    const rendered = render(c, {
       url: `${baseUrl}/${lawNum}`,
       source,
       xml,
@@ -57,7 +56,7 @@ export const handler: Handler = async (_req, ctx) => {
   }
   const description = lawXml.getSentenceFrom(path);
   if (description) {
-    const rendered = render({
+    const rendered = render(c, {
       url: `${baseUrl}/${lawNum}/${path}`,
       source,
       xmlUrl: apiUrl,
@@ -75,7 +74,7 @@ export const handler: Handler = async (_req, ctx) => {
       </li>
     );
   });
-  return ctx.render(
+  return c.html(
     <>
       <p>以下をお試しください。</p>
       <ul>{list}</ul>
@@ -83,79 +82,42 @@ export const handler: Handler = async (_req, ctx) => {
   );
 };
 
-function render(data: PageData) {
-  const body = renderToString(Page(data), null, { xml: true, pretty: true });
-  const headers: Record<string, string> = {};
-  headers["content-type"] = "application/xhtml+xml;charset=UTF-8";
-  return new Response(body, { headers });
+function render(c: Context, data: PageData) {
+  const headers = { 'Content-Type': 'application/xhtml+xml;charset=UTF-8' }
+  return c.html(Page(data), 200, headers);
 }
 function Page(data: PageData) {
   const mrkdwn = `# ${data.title}\n${data.description}`;
   const og_image = `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`;
-  return (
-    <html
-      /* @ts-expect-error */
-      xmlns="http://www.w3.org/1999/xhtml"
-      lang="ja"
-    >
+  return html`<?xml version="1.0" encoding="UTF-8"?>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
       <head>
         <link rel="stylesheet" href="/style.css" />
-        <title>{data.title} - 日本法令引用 URL</title>
+        <title>${data.title} - 日本法令引用 URL</title>
         <meta property="og:site_name" content="日本法令引用 URL" />
-        <meta property="og:title" content={data.title} />
-        <meta
-          property="og:description"
-          content={data.description}
-        />
-        <meta
-          property="og:url"
-          content={data.url}
-        />
-        <meta
-          property="og:image"
-          content={og_image}
-        />
+        <meta property="og:title" content="${data.title}" />
+        <meta property="og:description" content="${data.description}" />
+        <meta property="og:url" content="${data.url}" />
+        <meta property="og:image" content="${og_image}" />
         <meta property="og:image:width" content="833" />
         <meta property="og:image:height" content="476" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={data.title} />
-        <meta
-          name="twitter:description"
-          content={data.description}
-        />
-        <meta
-          name="twitter:image"
-          content={og_image}
-        />
+        <meta name="twitter:title" content="${data.title}" />
+        <meta name="twitter:description" content="${data.description}" />
+        <meta name="twitter:image" content="${og_image}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        <link
-          rel="mask-icon"
-          href="/favicon.svg"
-          /* @ts-expect-error */
-          color="pink"
-        />
+        <link rel="mask-icon" href="/favicon.svg" color="pink" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <script src="/page.js" defer={true} />
       </head>
       <body>
         <header>
           <h1 id="title">
             <a href="/">日本法令引用URL</a>
           </h1>
-          <a
-            id="source"
-            href={data.source}
-          >
-            原本へのリンク
-          </a>
+          <a id="source" href="${data.source}"> 原本へのリンク</a>
         </header>
-        <div
-          id="xml"
-          data-xmlurl={data.xmlUrl}
-          dangerouslySetInnerHTML={{ __html: data.xml! }}
-        >
-        </div>
+        <xml id="xml" data-xmlurl="${data.xmlUrl}">${raw(data.xml || "")}</xml>
         <div id="share" style="display: none;">
           <svg
             fill="#000000"
@@ -168,11 +130,13 @@ function Page(data: PageData) {
           </svg>
         </div>
       </body>
+      <script src="/page.js"></script>
     </html>
-  );
+  `
 }
-export default function renderError(props: PageProps) {
-  return (
+export default function renderError(c: Context) {
+  c.status(404)
+  return c.html(
     <html lang="ja">
       <head>
         <link rel="stylesheet" href="/style.css" />
@@ -185,11 +149,7 @@ export default function renderError(props: PageProps) {
           </h1>
         </header>
         <h2>404 URLに誤りがあるようです</h2>
-        {props.data}
       </body>
     </html>
   );
 }
-export const config: RouteConfig = {
-  routeOverride: "/:id([^_].+)",
-};

@@ -1,22 +1,19 @@
-import { elemToPath, pathToSelector } from "./path.ts";
+import { elemToPath, pathToSelector } from "../lib/path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
-let share: HTMLElement;
-addEventListener("load", () => {
-  prepareXml().then(observeSticky);
-  addEventListener("popstate", selectByPath);
-  document.addEventListener("click", onClick);
-  share = document.querySelector("#share")!;
-  if (navigator.share) {
-    share.addEventListener("click", () => {
-      navigator.share({
-        title: document.title,
-        text: share.parentElement!.innerText.slice(0, 100),
-        url: location.href,
-      });
+const share = document.getElementById("share")!;
+prepareXml().then(observeSticky);
+addEventListener("popstate", selectByPath);
+document.addEventListener("click", onClick);
+if (navigator.share) {
+  share.addEventListener("click", () => {
+    navigator.share({
+      title: document.title,
+      text: share.parentElement!.innerText.slice(0, 100),
+      url: location.href,
     });
-  }
-});
+  });
+}
 function getContainer(el: Element) {
   for (const c of containerElems.reverse()) {
     const container = el.closest(c);

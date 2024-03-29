@@ -1,20 +1,29 @@
-/// <reference lib="dom" />
+/** @jsx jsx */
+/** @jsxFrag Fragment */
+
 import LawList from "../islands/LawList.tsx";
 import { lawList } from "../lib/lawList.ts";
-import { LawItem } from "../lib/types.ts";
-import { Head } from "$fresh/runtime.ts";
-import { Handler, PageProps } from "$fresh/server.ts";
+import { jsx, Fragment } from 'hono/middleware.ts'
+import { html } from 'hono/helper.ts'
 
-interface PageInfo {
-  fullList: LawItem[];
+interface SiteData {
+  head: unknown
+  children: unknown
 }
 
-export const handler: Handler<PageInfo> = async (_req, ctx) => {
-  const data = { fullList: await lawList() };
-  return ctx.render(data);
-};
-export default function Home(props: PageProps<PageInfo>) {
-  const lawList: LawItem[] = props.data.fullList;
+const Layout = (props: SiteData) => html`<!DOCTYPE html>
+  <html lang="ja">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      ${props.head}
+    </head>
+    <body>
+      ${props.children}
+    </body>
+  </html>`
+
+export async function Index() {
   const items = [
     { href: "321CONSTITUTION", name: "憲法" },
     { href: "129AC0000000089", name: "民法" },
@@ -23,32 +32,34 @@ export default function Home(props: PageProps<PageInfo>) {
     { href: "408AC0000000109", name: "民事訴訟法" },
     { href: "323AC0000000131", name: "刑事訴訟法" },
   ];
-  return (
+  const head =
     <>
-      <Head>
-        <title>日本法令引用 URL</title>
-        <meta property="og:title" content="日本法令引用 URL" />
-        <meta
-          property="og:description"
-          content="クリックで選択してかんたんシェア"
-        />
-        <meta
-          property="og:image"
-          content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
-        />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" />
-        <meta name="twitter:description" />
-        <meta
-          name="twitter:image"
-          content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="/favicon.56088456.png" />
-        <link rel="mask-icon" href="/favicon.e2a89832.svg" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg" />
-        <link rel="stylesheet" href="/style.css" />
-      </Head>
+      <title>日本法令引用 URL</title>
+      <meta property="og:title" content="日本法令引用 URL" />
+      <meta
+        property="og:description"
+        content="クリックで選択してかんたんシェア"
+      />
+      <meta
+        property="og:image"
+        content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
+      />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" />
+      <meta name="twitter:description" />
+      <meta
+        name="twitter:image"
+        content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/png" href="/favicon.56088456.png" />
+      <link rel="mask-icon" href="/favicon.e2a89832.svg" />
+      <link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg" />
+      <link rel="stylesheet" href="/style.css" />
+      <script src="/list.mjs" type="module"></script>
+    </>
+  return (
+    <Layout head={head}>
       <h1>日本法令引用 URL</h1>
       <div id="popular">
         <ul class="inline">
@@ -59,7 +70,7 @@ export default function Home(props: PageProps<PageInfo>) {
           ))}
         </ul>
       </div>
-      <LawList fullList={lawList} />
-    </>
+      <LawList fullList={await lawList()} />
+    </Layout>
   );
 }
