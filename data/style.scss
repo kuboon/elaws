@@ -151,16 +151,20 @@ Article {
   }
 }
 Paragraph, Item, Subitem1 {
-  display: flex;
-  flex-basis: 100%;
+  // display: flex;
+  // flex-basis: 100%;
   flex-wrap: wrap;
   margin-top: 1rem;
+  &Num {
+    display: inline;
+  }
   &Title {
-    margin-right: 1rem;
     break-after: avoid-column;
+    display: inline;
   }
   &Sentence {
     break-after: column;
+    display: inline;
   }
 }
 Paragraph {
@@ -207,14 +211,26 @@ Ruby {
   display: inline;
 }
 TableStruct {
+  border-collapse: collapse;
   display: table;
 }
 TableRow {
   display: table-row;
 }
 TableColumn {
+  border: solid 1px;
   display: table-cell;
+  padding: 0.3rem;
 }
 StyleStruct {
   display: none;
+}
+Ruby Rt {
+  display: inline;
+  &::before {
+    content: "(";
+  }
+  &::after {
+    content: ")";
+  }
 }
