@@ -3,15 +3,16 @@
 
 import LawList from "../islands/LawList.tsx";
 import { lawList } from "../lib/lawList.ts";
-import { jsx, Fragment } from 'hono/middleware.ts'
-import { html } from 'hono/helper.ts'
+import { Fragment, jsx } from "hono/middleware.ts";
+import { html } from "hono/helper.ts";
 
 interface SiteData {
-  head: unknown
-  children: unknown
+  head: unknown;
+  children: unknown;
 }
 
-const Layout = (props: SiteData) => html`<!DOCTYPE html>
+const Layout = (props: SiteData) =>
+  html`<!DOCTYPE html>
   <html lang="ja">
     <head>
       <meta charset="utf-8" />
@@ -21,7 +22,7 @@ const Layout = (props: SiteData) => html`<!DOCTYPE html>
     <body>
       ${props.children}
     </body>
-  </html>`
+  </html>`;
 
 export async function Index() {
   const items = [
@@ -32,7 +33,7 @@ export async function Index() {
     { href: "408AC0000000109", name: "民事訴訟法" },
     { href: "323AC0000000131", name: "刑事訴訟法" },
   ];
-  const head =
+  const head = (
     <>
       <title>日本法令引用 URL</title>
       <meta property="og:title" content="日本法令引用 URL" />
@@ -58,6 +59,7 @@ export async function Index() {
       <link rel="stylesheet" href="/style.css" />
       <script src="/list.mjs" type="module"></script>
     </>
+  );
   return (
     <Layout head={head}>
       <h1>日本法令引用 URL</h1>

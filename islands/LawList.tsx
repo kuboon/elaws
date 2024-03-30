@@ -2,7 +2,7 @@
 /** @jsxFrag Fragment */
 import { LawItem } from "../lib/types.ts";
 
-import { jsx, Fragment } from 'hono/middleware.ts'
+import { Fragment, jsx } from "hono/middleware.ts";
 
 const LongList = ({ list }: { list: LawItem[] }) => {
   const groups: Record<string, LawItem[]> = {};
@@ -18,7 +18,9 @@ const LongList = ({ list }: { list: LawItem[] }) => {
         .map((k) => (
           <details>
             <summary>{k}</summary>
-            <ul><ShortList list={groups[k]} /></ul>
+            <ul>
+              <ShortList list={groups[k]} />
+            </ul>
           </details>
         ))}
     </div>
@@ -41,7 +43,9 @@ export default function LawList({ fullList }: { fullList: LawItem[] }) {
         絞り込み検索:
         <input id="query" type="text" />
       </p>
-      <p>件数: <span id="listLength">{list.length}</span></p>
+      <p>
+        件数: <span id="listLength">{list.length}</span>
+      </p>
       <LongList list={list} />
     </>
   );

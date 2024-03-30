@@ -4,8 +4,8 @@ import { cachedFetch } from "../lib/cache.ts";
 import LawXml from "../lib/LawXmlFxp.ts";
 
 import { type Context } from "hono/mod.ts";
-import { jsx, Fragment } from 'hono/middleware.ts'
-import { html, raw } from 'hono/helper.ts'
+import { Fragment, jsx } from "hono/middleware.ts";
+import { html, raw } from "hono/helper.ts";
 
 const baseUrl = "https://elaws.kbn.one";
 function articleNum(path: string) {
@@ -30,60 +30,59 @@ type PageData = {
   description?: string;
 };
 
-export const lawDetail = async (c: Context, lawNum?: string, path?: string) => {
-  if (!lawNum) return renderError(c)
+export const lawDetail = async (c: Context, next: () => Promise<void>) => {
+  const params = c.req.param();
+  const { lawNum, path } = params;
+  if (!lawNum) return next();
   const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
   const xml = await cachedFetch(apiUrl);
   const lawXml = new LawXml(xml);
-  if (!lawXml.isOk()) return renderError(c);
+  if (!lawXml.isOk()) return next();
 
   const title = lawXml.title() || "";
   const source = lawNum[0] === "%"
     ? apiUrl
     : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
-  const headers: Record<string, string> = {};
-  headers["Cache-Control"] = "s-maxage=3600, stale-while-revalidate";
   if (!path || path === "") {
     const description = lawXml.rootDescription();
-    const rendered = render(c, {
+    return render(c, {
       url: `${baseUrl}/${lawNum}`,
       source,
       xml,
       title,
       description,
     });
-    return rendered;
   }
   const description = lawXml.getSentenceFrom(path);
   if (description) {
-    const rendered = render(c, {
+    return render(c, {
       url: `${baseUrl}/${lawNum}/${path}`,
       source,
       xmlUrl: apiUrl,
       title: title + articleNum(path),
       description,
     });
-    return rendered;
   }
   const a = path.split("-");
   const list = a.map((_, i) => {
     const href = `/${lawNum}/${a.slice(0, i).join("-")}`;
     return (
-      <li>
-        <a href={href}>{href}</a>
-      </li>
+      <li><a href={href}>{href}</a></li>
     );
   });
   return c.html(
     <>
       <p>以下をお試しください。</p>
       <ul>{list}</ul>
-    </>,
+    </>, { status: 404 }
   );
 };
 
 function render(c: Context, data: PageData) {
-  const headers = { 'Content-Type': 'application/xhtml+xml;charset=UTF-8' }
+  const headers = {
+    "Content-Type": "application/xhtml+xml;charset=UTF-8",
+    "Cache-Control": "s-maxage=3600, stale-while-revalidate"
+  };
   return c.html(Page(data), 200, headers);
 }
 function Page(data: PageData) {
@@ -132,24 +131,5 @@ function Page(data: PageData) {
       </body>
       <script src="/page.js"></script>
     </html>
-  `
-}
-export default function renderError(c: Context) {
-  c.status(404)
-  return c.html(
-    <html lang="ja">
-      <head>
-        <link rel="stylesheet" href="/style.css" />
-        <title>Not Found - 日本法令引用 URL</title>
-      </head>
-      <body>
-        <header>
-          <h1 id="title">
-            <a href="/">日本法令引用URL</a>
-          </h1>
-        </header>
-        <h2>404 URLに誤りがあるようです</h2>
-      </body>
-    </html>
-  );
+  `;
 }

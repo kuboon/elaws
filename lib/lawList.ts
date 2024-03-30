@@ -8,7 +8,7 @@ export async function lawList() {
       (x) => x.text(),
     );
     const parsed = xmlParser.parse(xml);
-    if(!parsed[1]) {
+    if (!parsed[1]) {
       console.error(xml.slice(0, 1000));
       throw new Error("Failed to parse law list");
     }
