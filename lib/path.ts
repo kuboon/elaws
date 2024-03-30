@@ -1,9 +1,15 @@
 const blockElems = ["Article", "Paragraph", "Item", "Subitem1"];
+function getSupplIndex(suppl: Element) {
+  const idx = Array.from(suppl.parentElement!.querySelectorAll("SupplProvision")).indexOf(suppl);
+  if (idx < 0) throw new Error("SupplProvision not found");
+  return idx;
+}
 export function elemToPath(el: Element) {
   const ret: string[] = [];
   const suppl = el.closest("SupplProvision");
   if (suppl) {
-    ret.push("s-" + (suppl.attributes.getNamedItem("AmendLawId")?.value || 0));
+    const idx = getSupplIndex(suppl);
+    ret.push(`s-${idx}`);
   }
   blockElems.forEach((name) => {
     const container = el.closest(name);
@@ -20,18 +26,15 @@ export type DomQuery = {
   name: string;
   key?: string;
   val?: string;
+  idx?: number;
 };
 export function pathToArray(path: string) {
   const selectors: DomQuery[] = [];
   const a = path.split("-");
   if (a[0] === "s") {
     a.shift();
-    const val = a.shift();
-    if (val === "0") {
-      selectors.push({ name: "SupplProvision" });
-    } else {
-      selectors.push({ name: "SupplProvision", key: "AmendLawId", val });
-    }
+    const idx = Number(a.shift());
+    selectors.push({ name: "SupplProvision", idx });
   }
   a.forEach((v, i) => {
     if (v == "0") return;
@@ -44,7 +47,8 @@ export function pathToArray(path: string) {
 }
 export function pathToSelector(path: string) {
   const arr = pathToArray(path);
-  return arr.map(({ name, key, val }) =>
-    key ? `${name}[${key}='${val}']` : name
+  return arr.map(({ name, key, val, idx }) =>
+    key ? `${name}[${key}='${val}']` :
+    idx ? `${name}:nth-of-type(${idx + 1})` : name
   ).join(" ");
 }
