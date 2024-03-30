@@ -89,19 +89,6 @@ Result, ApplData>LawNum, TOC {
   display: none
 }
 $part-color: hsl(0, 50%, 50%);
-@mixin flex-container {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  flex-basis: 100%;
-  &Title {
-    margin-right: 1rem;
-    break-after: avoid-column;
-  }
-  &Sentence {
-    break-after: column;
-  }
-}
 @mixin section($color) {
   border-left: solid 4px $color;
   margin-bottom: 1rem;
@@ -163,8 +150,18 @@ Article {
     top: calc(var(--law-title-h) + var(--part-title-height) + var(--chapter-title-h));
   }
 }
-Paragraph, Item, SubItem1 {
-  @include flex-container;
+Paragraph, Item, Subitem1 {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  &Title {
+    margin-right: 1rem;
+    break-after: avoid-column;
+  }
+  &Sentence {
+    break-after: column;
+  }
 }
 Paragraph {
   @include section(adjust-hue($part-color, 90deg));
@@ -172,7 +169,7 @@ Paragraph {
 Item {
   @include section(adjust-hue($part-color, 120deg));
 }
-SubItem1 {
+Subitem1 {
   @include section(adjust-hue($part-color, 150deg));
 }
 
