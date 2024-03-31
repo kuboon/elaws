@@ -86,7 +86,6 @@ function observeSticky() {
     const px = Math.min(Math.max(lineHeight, top), originalHeight)
     stickyElem.style.maxHeight = `${px}px`
     scrollTo({ top: scrollY, behavior: "instant" })
-    console.log(top, px)
   }
 
   const intersectionObserver = new IntersectionObserver(function (entries) {
