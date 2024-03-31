@@ -73,26 +73,20 @@ async function prepareXml() {
   selectByPath();
 }
 
-function nextVisibleElem(elem: Element) {
-  let next = elem.nextElementSibling;
-  while (next && getComputedStyle(next).display === "none") {
-    next = next.nextElementSibling;
-  }
-  return next!;
-}
 function observeSticky() {
-  const lawTitle: HTMLDivElement = document.querySelector("LawTitle")!;
-  const originalHeight = lawTitle.clientHeight;
-  const nextElem = nextVisibleElem(lawTitle);
+  const stickyElem: HTMLDivElement = document.querySelector("LawTitle")!;
+  const originalHeight = stickyElem.clientHeight;
+  const observeTarget = stickyElem.insertAdjacentElement("afterend", document.createElement("div"))!;
 
   const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
   const lineHeight = 4.1 * rootFontSize;
 
   function onScroll() {
-    const top = nextElem.getBoundingClientRect().top
+    const top = observeTarget.getBoundingClientRect().top
     const px = Math.min(Math.max(lineHeight, top), originalHeight)
-    lawTitle.style.maxHeight = `${px}px`
+    stickyElem.style.maxHeight = `${px}px`
     scrollTo({ top: scrollY, behavior: "instant" })
+    console.log(top, px)
   }
 
   const intersectionObserver = new IntersectionObserver(function (entries) {
@@ -102,5 +96,5 @@ function observeSticky() {
       removeEventListener("scroll", onScroll);
     }
   }, { rootMargin: `0 0 -${globalThis.innerHeight - originalHeight}px 0`, threshold: [0, 1] });
-  intersectionObserver.observe(nextElem);
+  intersectionObserver.observe(observeTarget);
 }

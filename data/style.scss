@@ -107,13 +107,13 @@ Law {
   --section-title-h: 0rem;
 }
 LawTitle {
-  font-size: 2.5em;
   border-bottom: dotted var(--color) 3px;
-  top: 0;
-  z-index: 100;
-  transition: max-height 0.1s;
-  overflow: hidden;
+  font-size: 2.5em;
   max-height: 100vh;
+  overflow: hidden;
+  top: 0;
+  transition: max-height 0.1s;
+  z-index: 100;
   &:hover {
     max-height: 100vh !important;
   }
@@ -148,8 +148,6 @@ Article {
   }
 }
 Paragraph, Item, Subitem1 {
-  // display: flex;
-  // flex-basis: 100%;
   flex-wrap: wrap;
   margin-top: 1rem;
   &Num {
