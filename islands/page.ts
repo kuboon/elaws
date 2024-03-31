@@ -72,21 +72,35 @@ async function prepareXml() {
   }
   selectByPath();
 }
+
+function nextVisibleElem(elem: Element) {
+  let next = elem.nextElementSibling;
+  while (next && getComputedStyle(next).display === "none") {
+    next = next.nextElementSibling;
+  }
+  return next!;
+}
 function observeSticky() {
   const lawTitle: HTMLDivElement = document.querySelector("LawTitle")!;
-  let sticking = false;
+  const originalHeight = lawTitle.clientHeight;
+  const nextElem = nextVisibleElem(lawTitle);
+
+  const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  const lineHeight = 4.1 * rootFontSize;
+
+  function onScroll() {
+    const top = nextElem.getBoundingClientRect().top
+    const px = Math.min(Math.max(lineHeight, top), originalHeight)
+    lawTitle.style.maxHeight = `${px}px`
+    scrollTo({ top: scrollY, behavior: "instant" })
+  }
+
   const intersectionObserver = new IntersectionObserver(function (entries) {
-    if (sticking) return;
-    if (!entries[0].isIntersecting) {
-      lawTitle.classList.add("stuck");
-      sticking = true;
-      setTimeout(() => {
-        scrollTo({ top: lawTitle.offsetTop, behavior: "smooth" });
-        sticking = false;
-      }, 500);
+    if (entries[0].isIntersecting) {
+      addEventListener("scroll", onScroll);
     } else {
-      lawTitle.classList.remove("stuck");
+      removeEventListener("scroll", onScroll);
     }
-  }, { rootMargin: "-1px 0px 0px 0px", threshold: 1 });
-  intersectionObserver.observe(lawTitle);
+  }, { rootMargin: `0 0 -${globalThis.innerHeight - originalHeight}px 0`, threshold: [0, 1] });
+  intersectionObserver.observe(nextElem);
 }
