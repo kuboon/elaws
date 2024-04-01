@@ -91,20 +91,31 @@ function observeSticky(stickyElem: HTMLElement) {
   const originalHeight = stickyElem.clientHeight;
   const lineHeight = parseInt(getComputedStyle(stickyElem).lineHeight);
 
-  const observeTarget = stickyElem.insertAdjacentElement(
+  const beforeBlock = stickyElem.insertAdjacentElement(
+    "beforebegin",
+    document.createElement("div"),
+  ) as HTMLElement;
+  beforeBlock.style.height = `10px`;
+  beforeBlock.style.marginTop = `-10px`;
+  new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting) {
+      stickyElem.style.maxHeight = `${lineHeight}px`;
+    }
+  }).observe(beforeBlock);
+
+  const afterBlock = stickyElem.insertAdjacentElement(
     "afterend",
     document.createElement("div"),
   ) as HTMLElement;
   const observeHeight = (originalHeight - lineHeight) / 2;
-  observeTarget.style.height = `${observeHeight}px`;
-  observeTarget.style.marginBottom = `-${observeHeight}px`;
+  afterBlock.style.height = `${observeHeight}px`;
+  afterBlock.style.marginBottom = `-${observeHeight}px`;
 
-  const rootMargin = `-${lineHeight + observeHeight}px 0 -${
-    globalThis.innerHeight - originalHeight
-  }px 0`;
+  const rootMargin = `-${lineHeight + observeHeight}px 0
+  -${globalThis.innerHeight - originalHeight}px 0`;
   const threshold = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-  const intersectionObserver = new IntersectionObserver(function (entries) {
-    const top = observeTarget.getBoundingClientRect().top;
+  new IntersectionObserver(function (entries) {
+    const top = afterBlock.getBoundingClientRect().top;
     if (entries[0].isIntersecting) {
       const px = Math.min(Math.max(lineHeight, top), originalHeight);
       stickyElem.style.maxHeight = `${px}px`;
@@ -112,6 +123,5 @@ function observeSticky(stickyElem: HTMLElement) {
       const height = lineHeight < top ? originalHeight : lineHeight;
       stickyElem.style.maxHeight = `${height}px`;
     }
-  }, { rootMargin, threshold });
-  intersectionObserver.observe(observeTarget);
+  }, { rootMargin, threshold }).observe(afterBlock);
 }
