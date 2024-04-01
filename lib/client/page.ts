@@ -1,8 +1,9 @@
 import { elemToPath, pathToSelector } from "../path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
+
 const share = document.getElementById("share")!;
-prepareXml().then(observeSticky);
+prepareXml().then(ensureLawTitle).then(observeSticky);
 addEventListener("popstate", selectByPath);
 document.addEventListener("click", onClick);
 if (navigator.share) {
@@ -12,6 +13,15 @@ if (navigator.share) {
       text: share.parentElement!.innerText.slice(0, 100),
       url: location.href,
     });
+  });
+}
+function ensureLawTitle(): Promise<HTMLElement>{
+  const lawTitle = document.querySelector("LawTitle") as HTMLElement;
+  return new Promise((resolve) => {
+    if (lawTitle.clientHeight > 0) {
+      return resolve(lawTitle);
+    }
+    setTimeout(() => resolve(ensureLawTitle()), 100);
   });
 }
 function getContainer(el: Element) {
@@ -73,8 +83,7 @@ async function prepareXml() {
   selectByPath();
 }
 
-function observeSticky() {
-  const stickyElem: HTMLDivElement = document.querySelector("LawTitle")!;
+function observeSticky(stickyElem: HTMLElement) {
   const originalHeight = stickyElem.clientHeight;
   const observeTarget = stickyElem.insertAdjacentElement(
     "afterend",
@@ -83,10 +92,7 @@ function observeSticky() {
   observeTarget.style.height = `${originalHeight / 2}px`;
   observeTarget.style.marginBottom = `-${originalHeight / 2}px`;
 
-  const rootFontSize = parseFloat(
-    getComputedStyle(document.documentElement).fontSize,
-  );
-  const lineHeight = 4.1 * rootFontSize;
+  const lineHeight = parseInt(getComputedStyle(stickyElem).lineHeight);
 
   const rootMargin = `${-originalHeight / 2}px 0 -${
     globalThis.innerHeight - originalHeight
@@ -97,9 +103,11 @@ function observeSticky() {
     if (entries[0].isIntersecting) {
       const px = Math.min(Math.max(lineHeight, top), originalHeight);
       stickyElem.style.maxHeight = `${px}px`;
-    } else if (lineHeight < top) {
-      stickyElem.style.maxHeight = `${originalHeight}px`;
+    } else {
+      const height = lineHeight < top ? originalHeight : lineHeight;
+      stickyElem.style.maxHeight = `${height}px`;
     }
+    console.log(lineHeight, getComputedStyle(stickyElem).lineHeight)
   }, { rootMargin, threshold });
   intersectionObserver.observe(observeTarget);
 }

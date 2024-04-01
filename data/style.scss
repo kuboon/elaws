@@ -101,14 +101,14 @@ LawTitle, PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
 }
 
 Law {
-  --law-title-h: 4.1rem;
+  --law-title-h: 4rem;
   --part-title-height: 0rem;
   --chapter-title-h: 0rem;
   --section-title-h: 0rem;
 }
 LawTitle {
   border-bottom: dotted var(--color) 3px;
-  font-size: 2.5em;
+  font-size: 2.5rem;
   max-height: 100vh;
   overflow: hidden;
   top: 0;
