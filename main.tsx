@@ -20,11 +20,11 @@ app.get(
   "/BIZUDPGothic-Regular.ttf",
   serveStatic({ path: "static/BIZUDPGothic-Regular.ttf" }),
 );
-app.get("/list.mjs", bundledJsResponse("./islands/list.ts"));
+app.get("/list.mjs", bundledJsResponse("./lib/client/list.ts"));
 app.get("/favicon.:ext", serveStatic({ path: "static/favicon.svg" }));
 app.get("/sitemap.txt", routes.sitemap);
 
-app.get("/page.js", bundledJsResponse("./islands/page.ts"));
+app.get("/page.js", bundledJsResponse("./lib/client/page.ts"));
 app.get("/:lawNum{[0-9]{3}[0-9A-Z]{12}}/:path?", routes.lawDetail);
 
 Deno.serve(app.fetch).finished.then(() => {

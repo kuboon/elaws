@@ -1,7 +1,7 @@
 {
   "tasks": {
-    "serve": "deno run --allow-net --allow-env=DENO_REGISTRY_URL --allow-read=. main.tsx",
-    "dev": "deno run --allow-net --allow-env=DENO_REGISTRY_URL,DENO_DIR,DENO_AUTH_TOKENS --deny-env=XDG_DATA_HOME,HOME --allow-read=.,$DENO_DIR --watch main.tsx"
+    "serve": "deno run --allow-net --allow-env=DENO_REGISTRY_URL,DENO_DIR,DENO_AUTH_TOKENS --deny-env=XDG_DATA_HOME,HOME,SASS_PATH --allow-read=.,$DENO_DIR main.tsx",
+    "dev": "deno run --allow-net --allow-env=DENO_REGISTRY_URL,DENO_DIR,DENO_AUTH_TOKENS --deny-env=XDG_DATA_HOME,HOME,SASS_PATH --allow-read=.,$DENO_DIR --watch main.tsx"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext", "deno.ns"]

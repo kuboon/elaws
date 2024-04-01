@@ -1,8 +1,8 @@
-import { compile } from "https://x.nest.land/sass@2.0.0/mod.ts";
+import { compileStringAsync } from "npm:sass@1.72.0"
 
 export const styleCss = async () => {
   const scss = await Deno.readTextFile("data/style.scss");
-  const body = compile(scss);
-  const headers: Record<string, string> = { "Content-Type": "text/css" };
-  return new Response(body, { headers });
+  const body = await compileStringAsync(scss);
+  const headers = { "Content-Type": "text/css" };
+  return new Response(body.css, { headers });
 };
