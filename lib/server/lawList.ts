@@ -1,5 +1,5 @@
-import { xmlParser } from "../server_deps.ts";
-import { LawItem } from "./types.ts";
+import { xmlParser } from "./deps.ts";
+import { LawItem } from "../types.ts";
 
 let cached: LawItem[] | undefined;
 export async function lawList() {

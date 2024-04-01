@@ -1,8 +1,8 @@
 /** @jsx jsx */
 /** @jsxFrag Fragment */
 
-import LawList from "../islands/LawList.tsx";
-import { lawList } from "../lib/lawList.ts";
+import LawList from "../lib/server/LawList.tsx";
+import { lawList } from "../lib/server/lawList.ts";
 import { Fragment, jsx } from "hono/middleware.ts";
 import { html } from "hono/helper.ts";
 

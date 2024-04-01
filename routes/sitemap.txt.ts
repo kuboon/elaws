@@ -1,4 +1,4 @@
-import { lawList } from "../lib/lawList.ts";
+import { lawList } from "../lib/server/lawList.ts";
 
 export const sitemap = async () => {
   const text = (await lawList()).map((x) =>

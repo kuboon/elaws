@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag Fragment */
-import { cachedFetch } from "../lib/cache.ts";
-import LawXml from "../lib/LawXmlFxp.ts";
+import { cachedFetch } from "../lib/server/cache.ts";
+import LawXml from "../lib/server/LawXmlFxp.ts";
 
 import { type Context } from "hono/mod.ts";
 import { Fragment, jsx } from "hono/middleware.ts";
@@ -67,21 +67,24 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   const list = a.map((_, i) => {
     const href = `/${lawNum}/${a.slice(0, i).join("-")}`;
     return (
-      <li><a href={href}>{href}</a></li>
+      <li>
+        <a href={href}>{href}</a>
+      </li>
     );
   });
   return c.html(
     <>
       <p>以下をお試しください。</p>
       <ul>{list}</ul>
-    </>, { status: 404 }
+    </>,
+    { status: 404 },
   );
 };
 
 function render(c: Context, data: PageData) {
   const headers = {
     "Content-Type": "application/xhtml+xml;charset=UTF-8",
-    "Cache-Control": "s-maxage=3600, stale-while-revalidate"
+    "Cache-Control": "s-maxage=3600, stale-while-revalidate",
   };
   return c.html(Page(data), 200, headers);
 }

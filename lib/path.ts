@@ -1,6 +1,8 @@
 const blockElems = ["Article", "Paragraph", "Item", "Subitem1"];
 function getSupplIndex(suppl: Element) {
-  const idx = Array.from(suppl.parentElement!.querySelectorAll("SupplProvision")).indexOf(suppl);
+  const idx = Array.from(
+    suppl.parentElement!.querySelectorAll("SupplProvision"),
+  ).indexOf(suppl);
   if (idx < 0) throw new Error("SupplProvision not found");
   return idx;
 }
@@ -48,7 +50,10 @@ export function pathToArray(path: string) {
 export function pathToSelector(path: string) {
   const arr = pathToArray(path);
   return arr.map(({ name, key, val, idx }) =>
-    key ? `${name}[${key}='${val}']` :
-    idx ? `${name}:nth-of-type(${idx + 1})` : name
+    key
+      ? `${name}[${key}='${val}']`
+      : idx
+      ? `${name}:nth-of-type(${idx + 1})`
+      : name
   ).join(" ");
 }

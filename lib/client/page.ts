@@ -1,4 +1,4 @@
-import { elemToPath, pathToSelector } from "../lib/path.ts";
+import { elemToPath, pathToSelector } from "../path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 const share = document.getElementById("share")!;
@@ -76,22 +76,29 @@ async function prepareXml() {
 function observeSticky() {
   const stickyElem: HTMLDivElement = document.querySelector("LawTitle")!;
   const originalHeight = stickyElem.clientHeight;
-  const observeTarget = stickyElem.insertAdjacentElement("afterend", document.createElement("div")) as HTMLElement;
-  observeTarget.style.height = `${originalHeight/2}px`;
-  observeTarget.style.marginBottom = `-${originalHeight/2}px`;
+  const observeTarget = stickyElem.insertAdjacentElement(
+    "afterend",
+    document.createElement("div"),
+  ) as HTMLElement;
+  observeTarget.style.height = `${originalHeight / 2}px`;
+  observeTarget.style.marginBottom = `-${originalHeight / 2}px`;
 
-  const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  const rootFontSize = parseFloat(
+    getComputedStyle(document.documentElement).fontSize,
+  );
   const lineHeight = 4.1 * rootFontSize;
 
-  const rootMargin = `${-originalHeight/2}px 0 -${globalThis.innerHeight - originalHeight}px 0`;
+  const rootMargin = `${-originalHeight / 2}px 0 -${
+    globalThis.innerHeight - originalHeight
+  }px 0`;
   const threshold = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
   const intersectionObserver = new IntersectionObserver(function (entries) {
-    const top = observeTarget.getBoundingClientRect().top
-    if(entries[0].isIntersecting){
-      const px = Math.min(Math.max(lineHeight, top), originalHeight)
-      stickyElem.style.maxHeight = `${px}px`
-    } else if(lineHeight<top) {
-      stickyElem.style.maxHeight = `${originalHeight}px`
+    const top = observeTarget.getBoundingClientRect().top;
+    if (entries[0].isIntersecting) {
+      const px = Math.min(Math.max(lineHeight, top), originalHeight);
+      stickyElem.style.maxHeight = `${px}px`;
+    } else if (lineHeight < top) {
+      stickyElem.style.maxHeight = `${originalHeight}px`;
     }
   }, { rootMargin, threshold });
   intersectionObserver.observe(observeTarget);

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 /** @jsxFrag Fragment */
-import { LawItem } from "../lib/types.ts";
+import { LawItem } from "../types.ts";
 
 import { Fragment, jsx } from "hono/middleware.ts";
 

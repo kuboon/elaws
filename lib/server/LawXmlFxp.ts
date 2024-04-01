@@ -1,5 +1,5 @@
-import { xmlParser } from "../server_deps.ts";
-import { DomQuery, pathToArray } from "../lib/path.ts";
+import { xmlParser } from "./deps.ts";
+import { DomQuery, pathToArray } from "../path.ts";
 
 type JSONValue =
   | string

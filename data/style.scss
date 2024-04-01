@@ -49,6 +49,11 @@ ul.inline {
     }
   }
 }
+.hidden {
+  display: none;
+}
+
+// law page
 .collapse {
   &::after {
     content: " [+]";
@@ -57,11 +62,6 @@ ul.inline {
     display: none;
   }
 }
-.hidden {
-  display: none;
-}
-
-// law page
 .selected {
   background-color: var(--bg-selected);
   position: relative;
