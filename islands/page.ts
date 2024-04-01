@@ -86,11 +86,10 @@ function observeSticky() {
   const rootMargin = `${-originalHeight/2}px 0 -${globalThis.innerHeight - originalHeight}px 0`;
   const threshold = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
   const intersectionObserver = new IntersectionObserver(function (entries) {
-    const top = stickyElem.getBoundingClientRect().top
+    const top = observeTarget.getBoundingClientRect().top
     if(entries[0].isIntersecting){
       const px = Math.min(Math.max(lineHeight, top), originalHeight)
       stickyElem.style.maxHeight = `${px}px`
-      scrollTo({ top: scrollY, behavior: "instant" })
     } else if(lineHeight<top) {
       stickyElem.style.maxHeight = `${originalHeight}px`
     }
