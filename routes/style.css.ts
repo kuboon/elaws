@@ -1,4 +1,4 @@
-import { compileStringAsync } from "npm:sass@1.72.0"
+import { compileStringAsync } from "npm:sass@1.72.0";
 
 export const styleCss = async () => {
   const scss = await Deno.readTextFile("data/style.scss");

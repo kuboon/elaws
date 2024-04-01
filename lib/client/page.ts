@@ -3,7 +3,9 @@ import { elemToPath, pathToSelector } from "../path.ts";
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 
 const share = document.getElementById("share")!;
-prepareXml().then(ensureLawTitle).then(observeSticky);
+prepareXml().then(selectByPath)
+  .then(ensureLawTitle).then(observeSticky)
+  .then(sleep(200)).then(selectByPath);
 addEventListener("popstate", selectByPath);
 document.addEventListener("click", onClick);
 if (navigator.share) {
@@ -15,7 +17,7 @@ if (navigator.share) {
     });
   });
 }
-function ensureLawTitle(): Promise<HTMLElement>{
+function ensureLawTitle(): Promise<HTMLElement> {
   const lawTitle = document.querySelector("LawTitle") as HTMLElement;
   return new Promise((resolve) => {
     if (lawTitle.clientHeight > 0) {
@@ -23,6 +25,9 @@ function ensureLawTitle(): Promise<HTMLElement>{
     }
     setTimeout(() => resolve(ensureLawTitle()), 100);
   });
+}
+function sleep(ms: number) {
+  return () => new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 function getContainer(el: Element) {
   for (const c of containerElems.reverse()) {
@@ -80,21 +85,21 @@ async function prepareXml() {
       `<?xml version="1.0" encoding="UTF-8"?>`.length,
     );
   }
-  selectByPath();
 }
 
 function observeSticky(stickyElem: HTMLElement) {
   const originalHeight = stickyElem.clientHeight;
+  const lineHeight = parseInt(getComputedStyle(stickyElem).lineHeight);
+
   const observeTarget = stickyElem.insertAdjacentElement(
     "afterend",
     document.createElement("div"),
   ) as HTMLElement;
-  observeTarget.style.height = `${originalHeight / 2}px`;
-  observeTarget.style.marginBottom = `-${originalHeight / 2}px`;
+  const observeHeight = (originalHeight - lineHeight) / 2;
+  observeTarget.style.height = `${observeHeight}px`;
+  observeTarget.style.marginBottom = `-${observeHeight}px`;
 
-  const lineHeight = parseInt(getComputedStyle(stickyElem).lineHeight);
-
-  const rootMargin = `${-originalHeight / 2}px 0 -${
+  const rootMargin = `-${lineHeight + observeHeight}px 0 -${
     globalThis.innerHeight - originalHeight
   }px 0`;
   const threshold = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
@@ -107,7 +112,6 @@ function observeSticky(stickyElem: HTMLElement) {
       const height = lineHeight < top ? originalHeight : lineHeight;
       stickyElem.style.maxHeight = `${height}px`;
     }
-    console.log(lineHeight, getComputedStyle(stickyElem).lineHeight)
   }, { rootMargin, threshold });
   intersectionObserver.observe(observeTarget);
 }
