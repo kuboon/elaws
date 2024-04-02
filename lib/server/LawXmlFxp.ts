@@ -21,6 +21,10 @@ function walk(
   all?: string[],
 ): JSONValue | undefined {
   if (Array.isArray(json)) {
+    if (q.idx && (typeof json[0] === "object")) {
+      const filtered = json.filter((j) => Object.hasOwn(j, q.name));
+      if (filtered.length > 0) return filtered[q.idx];
+    }
     for (const j of json) {
       const ret = walk(j as JSONValue, q, all);
       if (ret && !all) return ret;

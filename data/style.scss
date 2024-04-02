@@ -82,6 +82,16 @@ ul.inline {
     opacity: 0.5;
   }
 }
+
+hr {
+  background-color: var(--bg);
+  border: dotted var(--color);
+  border-width: 3px 0 0 0;
+  margin: 0;
+  padding-block: 3px;
+  position: sticky;
+  z-index: 99;
+}
 Law * {
   display: block;
 }
@@ -91,7 +101,7 @@ Result, ApplData>LawNum, TOC {
 $part-color: hsl(0, 50%, 50%);
 @mixin section($color) {
   border-left: solid 4px $color;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   padding-left: 6px;
 }
 
@@ -101,26 +111,31 @@ LawTitle, PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
 }
 
 Law {
-  --law-title-h: 4rem;
+  --law-title-h: 4.3rem;
   --part-title-height: 0rem;
   --chapter-title-h: 0rem;
   --section-title-h: 0rem;
 }
 LawTitle {
-  border-bottom: dotted var(--color) 3px;
   font-size: 2.5rem;
-  max-height: 100vh;
   overflow: hidden;
   top: 0;
-  transition: max-height 0.1s;
-  z-index: 100;
+  z-index: -1;
   &:hover {
     max-height: 100vh !important;
   }
 }
+LawTitle:hover ~ LawTitle {
+  visibility: hidden;
+}
+
+EnactStatement, MainProvision {
+  background-color: var(--bg);
+}
 
 Part {
   --part-title-height: 3rem;
+  background-color: var(--bg);
   @include section($part-color);
   &Title {
     z-index: 90;
@@ -130,6 +145,7 @@ Part {
 }
 Chapter {
   --chapter-title-h: 2.2rem;
+  background-color: var(--bg);
   @include section(adjust-hue($part-color, 30deg));
   &Title {
     z-index: 80;
@@ -173,28 +189,33 @@ Subitem1 {
 }
 
 SupplProvision {
+  background-color: var(--bg);
   @include section($part-color);
   &::before {
-    content: attr(AmendLawNum);
-    display: block;;
     background-color: var(--bg);
+    content: attr(AmendLawNum);
+    display: block;
     position: sticky;
-    top: 0;
+    top: var(--law-title-h);
     z-index: 4;
   }
   &Label {
     background-color: var(--bg);
     font-size: 1.5rem;
     position: sticky;
-    top: 1.5rem;
+    top: calc(var(--law-title-h) + var(--amend-law-num-h));
     z-index: 3;
   }
   Article {
     &Title {
-      top: 3.1rem;
+      position: sticky;
+      top: calc(var(--law-title-h) + var(--amend-law-num-h) + 2rem);
       z-index: 2;
     }
   }
+}
+SupplProvision[AmendLawNum] {
+  --amend-law-num-h: 1.9rem;
 }
 Column {
   display: block;
@@ -204,6 +225,11 @@ Sentence {
 }
 Ruby {
   display: inline;
+  Rt {
+    display: inline-block;
+    font-size: x-small;
+    vertical-align: super;
+  }
 }
 TableStruct {
   border-collapse: collapse;
@@ -220,12 +246,6 @@ TableColumn {
 StyleStruct {
   display: none;
 }
-Ruby Rt {
-  display: inline;
-  &::before {
-    content: "(";
-  }
-  &::after {
-    content: ")";
-  }
+ImageData {
+  display: none;
 }

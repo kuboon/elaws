@@ -4,8 +4,7 @@ const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 
 const share = document.getElementById("share")!;
 prepareXml().then(selectByPath)
-  .then(ensureLawTitle).then(observeSticky)
-  .then(sleep(200)).then(selectByPath);
+  .then(ensureLawTitle).then(observeSticky);
 addEventListener("popstate", selectByPath);
 document.addEventListener("click", onClick);
 if (navigator.share) {
@@ -17,17 +16,20 @@ if (navigator.share) {
     });
   });
 }
-function ensureLawTitle(): Promise<HTMLElement> {
+type ObserveStickyParams = { stickyElem: HTMLElement; lineHeight: number };
+async function ensureLawTitle(): Promise<ObserveStickyParams> {
   const lawTitle = document.querySelector("LawTitle") as HTMLElement;
-  return new Promise((resolve) => {
-    if (lawTitle.clientHeight > 0) {
-      return resolve(lawTitle);
+  const style = getComputedStyle(lawTitle);
+  const { promise, resolve } = Promise.withResolvers<ObserveStickyParams>();
+  while (true) {
+    const lineHeight = parseInt(style.lineHeight);
+    if (lineHeight > 0) {
+      resolve({ stickyElem: lawTitle, lineHeight });
+      break;
     }
-    setTimeout(() => resolve(ensureLawTitle()), 100);
-  });
-}
-function sleep(ms: number) {
-  return () => new Promise<void>((resolve) => setTimeout(resolve, ms));
+    await new Promise<void>((resolve) => setTimeout(resolve, 100));
+  }
+  return promise;
 }
 function getContainer(el: Element) {
   for (const c of containerElems.reverse()) {
@@ -87,41 +89,14 @@ async function prepareXml() {
   }
 }
 
-function observeSticky(stickyElem: HTMLElement) {
-  const originalHeight = stickyElem.clientHeight;
-  const lineHeight = parseInt(getComputedStyle(stickyElem).lineHeight);
+function observeSticky({ stickyElem, lineHeight }: ObserveStickyParams) {
+  const stickyFirstLine = stickyElem.cloneNode(true) as HTMLElement;
+  stickyFirstLine.style.marginBlockEnd = `${-lineHeight}px`;
+  stickyFirstLine.style.maxHeight = `${lineHeight}px`;
+  stickyFirstLine.style.zIndex = "100";
+  stickyElem.insertAdjacentElement("beforebegin", stickyFirstLine);
 
-  const beforeBlock = stickyElem.insertAdjacentElement(
-    "beforebegin",
-    document.createElement("div"),
-  ) as HTMLElement;
-  beforeBlock.style.height = `10px`;
-  beforeBlock.style.marginTop = `-10px`;
-  new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) {
-      stickyElem.style.maxHeight = `${lineHeight}px`;
-    }
-  }).observe(beforeBlock);
-
-  const afterBlock = stickyElem.insertAdjacentElement(
-    "afterend",
-    document.createElement("div"),
-  ) as HTMLElement;
-  const observeHeight = (originalHeight - lineHeight) / 2;
-  afterBlock.style.height = `${observeHeight}px`;
-  afterBlock.style.marginBottom = `-${observeHeight}px`;
-
-  const rootMargin = `-${lineHeight + observeHeight}px 0
-  -${globalThis.innerHeight - originalHeight}px 0`;
-  const threshold = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-  new IntersectionObserver(function (entries) {
-    const top = afterBlock.getBoundingClientRect().top;
-    if (entries[0].isIntersecting) {
-      const px = Math.min(Math.max(lineHeight, top), originalHeight);
-      stickyElem.style.maxHeight = `${px}px`;
-    } else {
-      const height = lineHeight < top ? originalHeight : lineHeight;
-      stickyElem.style.maxHeight = `${height}px`;
-    }
-  }, { rootMargin, threshold }).observe(afterBlock);
+  const hr = document.createElement("hr");
+  hr.style.top = `${lineHeight}px`;
+  stickyElem.insertAdjacentElement("afterend", hr);
 }
