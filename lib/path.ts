@@ -13,6 +13,7 @@ export function elemToPath(el: Element) {
     const idx = getSupplIndex(suppl);
     ret.push(`s-${idx}`);
   }
+  if (el.closest("AppdxTable")) return false;
   blockElems.forEach((name) => {
     const container = el.closest(name);
     ret.push(

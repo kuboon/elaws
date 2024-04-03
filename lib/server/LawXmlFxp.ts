@@ -22,7 +22,7 @@ function walk(
 ): JSONValue | undefined {
   if (Array.isArray(json)) {
     if (q.idx && (typeof json[0] === "object")) {
-      const filtered = json.filter((j) => Object.hasOwn(j, q.name));
+      const filtered = json.filter((j) => Object.hasOwn(j as object, q.name));
       if (filtered.length > 0) return filtered[q.idx];
     }
     for (const j of json) {
