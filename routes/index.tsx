@@ -43,19 +43,18 @@ export async function Index() {
       />
       <meta
         property="og:image"
-        content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
+        content="https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1"
       />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" />
       <meta name="twitter:description" />
       <meta
         name="twitter:image"
-        content="https://og.kbn.one/%23%20日本法令引用 URL%0Aクリックで選択してかんたんシェア.png?md=1"
+        content="https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1"
       />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" type="image/png" href="/favicon.56088456.png" />
-      <link rel="mask-icon" href="/favicon.e2a89832.svg" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.e2a89832.svg" />
+      <link rel="mask-icon" href="/favicon.svg" />
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <link rel="stylesheet" href="/style.css" />
       <script src="/list.mjs" type="module"></script>
     </>

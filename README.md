@@ -9,3 +9,6 @@
 
 [hono](https://hono.dev) で実装されており、 https://deno.com/deploy
 で動作します。
+
+- [e-Gov 法令 API 仕様書](https://elaws.e-gov.go.jp/file/houreiapi_shiyosyo.pdf)
+- [法令標準XML スキーマ](https://elaws.e-gov.go.jp/file/XMLSchemaForJapaneseLaw_v3.pdf)
