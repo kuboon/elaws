@@ -7,7 +7,7 @@ import { html } from "hono/helper.ts";
 import { head } from "../lib/server/htmlHead.ts";
 
 export function Index() {
-  const mrkdwn = "# 日本法令引用URL スマホでスイスイ かんたんシェア"
+  const mrkdwn = "# 日本法令引用URL\nスマホでスイスイ かんたんシェア"
   const headTags = head({
     description: "スマホでスイスイ かんたんシェア",
     url: "https://elaws.kbn.one",
