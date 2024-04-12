@@ -7,11 +7,12 @@ import { html } from "hono/helper.ts";
 import { head } from "../lib/server/htmlHead.ts";
 
 export function Index() {
+  const mrkdwn = "# 日本法令引用URL スマホでスイスイ かんたんシェア"
   const headTags = head({
-    description: "クリックで選択してかんたんシェア",
+    description: "スマホでスイスイ かんたんシェア",
     url: "https://elaws.kbn.one",
     image:
-      "https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1",
+      `https://og.kbn.one/${encodeURIComponent(mrkdwn)}.png?md=1`,
   });
   const items = [
     { href: "321CONSTITUTION", name: "憲法" },

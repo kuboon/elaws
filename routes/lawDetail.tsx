@@ -95,7 +95,7 @@ function Page(data: PageData) {
     title: data.title,
     description: data.description!,
     url: data.url,
-    image: `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`
+    image: `https://og.kbn.one/${encodeURIComponent(mrkdwn)}.png?md=1`
 
   })
   return html`<?xml version="1.0" encoding="UTF-8"?>
