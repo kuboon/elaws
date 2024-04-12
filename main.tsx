@@ -25,7 +25,8 @@ app.get("/favicon.:ext", serveStatic({ path: "static/favicon.svg" }));
 app.get("/sitemap.txt", routes.sitemap);
 
 app.get("/page.js", bundledJsResponse("./lib/client/page.ts"));
-app.get("/:lawNum{[0-9]{3}[0-9A-Z]{12}}/:path?", routes.lawDetail);
+app.get("/:lawId{[0-9]{3}[0-9A-Z]{12}}/:path?", routes.lawDetail);
+app.get("/:lawNo/:path?", routes.redirect)
 
 Deno.serve(app.fetch).finished.then(() => {
   console.log("Server stopped.");

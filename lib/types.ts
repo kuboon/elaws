@@ -1,5 +1,6 @@
 export type LawItem = {
   LawId: string;
-  PromulgationDate: string;
   LawName: string;
+  LawNo: string;
+  PromulgationDate: string;
 };

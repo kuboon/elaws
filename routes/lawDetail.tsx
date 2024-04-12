@@ -32,21 +32,19 @@ type PageData = {
 
 export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   const params = c.req.param();
-  const { lawNum, path } = params;
-  if (!lawNum) return next();
-  const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawNum;
+  const { lawId, path } = params;
+  if (!lawId) return next();
+  const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawId;
   const xml = await cachedFetch(apiUrl);
   const lawXml = new LawXml(xml);
   if (!lawXml.isOk()) return next();
 
   const title = lawXml.title() || "";
-  const source = lawNum[0] === "%"
-    ? apiUrl
-    : "https://elaws.e-gov.go.jp/document?lawid=" + lawNum;
+  const source = "https://elaws.e-gov.go.jp/document?lawid=" + lawId;
   if (!path || path === "") {
     const description = lawXml.rootDescription();
     return render(c, {
-      url: `${baseUrl}/${lawNum}`,
+      url: `${baseUrl}/${lawId}`,
       source,
       xml,
       title,
@@ -56,7 +54,7 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   const description = lawXml.getSentenceFrom(path);
   if (description) {
     return render(c, {
-      url: `${baseUrl}/${lawNum}/${path}`,
+      url: `${baseUrl}/${lawId}/${path}`,
       source,
       xmlUrl: apiUrl,
       title: title + articleNum(path),
@@ -65,7 +63,7 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   }
   const a = path.split("-");
   const list = a.map((_, i) => {
-    const href = `/${lawNum}/${a.slice(0, i).join("-")}`;
+    const href = `/${lawId}/${a.slice(0, i).join("-")}`;
     return (
       <li>
         <a href={href}>{href}</a>

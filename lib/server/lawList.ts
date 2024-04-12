@@ -18,6 +18,7 @@ export async function lawList() {
       return {
         LawId: info[0].LawId[0]["#text"],
         LawName: info[1].LawName[0]["#text"],
+        LawNo: info[2].LawNo[0]["#text"],
         PromulgationDate: info[3].PromulgationDate[0]?.["#text"] || "",
       };
     }).filter((x: unknown) => x) as LawItem[];
