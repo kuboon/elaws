@@ -2,20 +2,24 @@ import { elemToPath, pathToSelector } from "../path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 
-const share = document.getElementById("share")!;
-prepareXml().then(selectByPath)
-  .then(ensureLawTitle).then(observeSticky);
-addEventListener("popstate", selectByPath);
-document.addEventListener("click", onClick);
-if (navigator.share) {
-  share.addEventListener("click", () => {
-    navigator.share({
-      title: document.title,
-      text: share.parentElement!.innerText.slice(0, 100),
-      url: location.href,
+let share: HTMLElement
+document.addEventListener("DOMContentLoaded", ()=> {
+  share = document.getElementById("share")!;
+  prepareXml().then(selectByPath)
+    .then(ensureLawTitle).then(observeSticky);
+  addEventListener("popstate", selectByPath);
+  document.addEventListener("click", onClick);
+  if (navigator.share) {
+    share.addEventListener("click", () => {
+      navigator.share({
+        title: document.title,
+        text: share.parentElement!.innerText.slice(0, 100),
+        url: location.href,
+      });
     });
-  });
-}
+  }
+})
+
 type ObserveStickyParams = { stickyElem: HTMLElement; lineHeight: number };
 async function ensureLawTitle(): Promise<ObserveStickyParams> {
   const lawTitle = document.querySelector("LawTitle") as HTMLElement;

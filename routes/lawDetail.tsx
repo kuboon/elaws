@@ -6,6 +6,7 @@ import LawXml from "../lib/server/LawXmlFxp.ts";
 import { type Context } from "hono/mod.ts";
 import { Fragment, jsx } from "hono/middleware.ts";
 import { html, raw } from "hono/helper.ts";
+import { head } from "../lib/server/htmlHead.ts";
 
 const baseUrl = "https://elaws.kbn.one";
 function articleNum(path: string) {
@@ -61,6 +62,8 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
       description,
     });
   }
+
+  // render 404
   const a = path.split("-");
   const list = a.map((_, i) => {
     const href = `/${lawId}/${a.slice(0, i).join("-")}`;
@@ -88,27 +91,18 @@ function render(c: Context, data: PageData) {
 }
 function Page(data: PageData) {
   const mrkdwn = `# ${data.title}\n${data.description}`;
-  const og_image = `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`;
+  const commonHead = head({
+    title: data.title,
+    description: data.description!,
+    url: data.url,
+    image: `https://og.kbn.one/${encodeURIComponent(mrkdwn)}`
+
+  })
   return html`<?xml version="1.0" encoding="UTF-8"?>
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
       <head>
-        <link rel="stylesheet" href="/style.css" />
-        <title>${data.title} - 日本法令引用 URL</title>
-        <meta property="og:site_name" content="日本法令引用 URL" />
-        <meta property="og:title" content="${data.title}" />
-        <meta property="og:description" content="${data.description}" />
-        <meta property="og:url" content="${data.url}" />
-        <meta property="og:image" content="${og_image}" />
-        <meta property="og:image:width" content="833" />
-        <meta property="og:image:height" content="476" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="${data.title}" />
-        <meta name="twitter:description" content="${data.description}" />
-        <meta name="twitter:image" content="${og_image}" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
-        <link rel="mask-icon" href="/favicon.svg" color="pink" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        ${commonHead}
+        <script src="/page.js"></script>
       </head>
       <body>
         <header>
@@ -125,7 +119,6 @@ function Page(data: PageData) {
           </svg>
         </div>
       </body>
-      <script src="/page.js"></script>
     </html>
   `;
 }

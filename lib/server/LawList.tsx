@@ -1,5 +1,6 @@
 /** @jsx jsx */
 /** @jsxFrag Fragment */
+import { lawList } from "./lawList.ts";
 import { LawItem } from "../types.ts";
 
 import { Fragment, jsx } from "hono/middleware.ts";
@@ -35,8 +36,8 @@ const ShortList = ({ list }: { list: LawItem[] }) => (
     ))}
   </>
 );
-export default function LawList({ fullList }: { fullList: LawItem[] }) {
-  const list = fullList;
+export default async function LawList() {
+  const list = await lawList();
   return (
     <>
       <p>

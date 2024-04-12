@@ -2,29 +2,17 @@
 /** @jsxFrag Fragment */
 
 import LawList from "../lib/server/LawList.tsx";
-import { lawList } from "../lib/server/lawList.ts";
 import { Fragment, jsx } from "hono/middleware.ts";
 import { html } from "hono/helper.ts";
+import { head } from "../lib/server/htmlHead.ts";
 
-interface SiteData {
-  head: unknown;
-  children: unknown;
-}
-
-const Layout = (props: SiteData) =>
-  html`<!DOCTYPE html>
-  <html lang="ja">
-    <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      ${props.head}
-    </head>
-    <body>
-      ${props.children}
-    </body>
-  </html>`;
-
-export async function Index() {
+export function Index() {
+  const headTags = head({
+    description: "クリックで選択してかんたんシェア",
+    url: "https://elaws.kbn.one",
+    image:
+      "https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1",
+  });
   const items = [
     { href: "321CONSTITUTION", name: "憲法" },
     { href: "129AC0000000089", name: "民法" },
@@ -33,45 +21,24 @@ export async function Index() {
     { href: "408AC0000000109", name: "民事訴訟法" },
     { href: "323AC0000000131", name: "刑事訴訟法" },
   ];
-  const head = (
-    <>
-      <title>日本法令引用 URL</title>
-      <meta property="og:title" content="日本法令引用 URL" />
-      <meta
-        property="og:description"
-        content="クリックで選択してかんたんシェア"
-      />
-      <meta
-        property="og:image"
-        content="https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1"
-      />
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" />
-      <meta name="twitter:description" />
-      <meta
-        name="twitter:image"
-        content="https://og.kbn.one/%23%20日本法令引用%20URL%0Aクリックで選択してかんたんシェア.png?md=1"
-      />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="mask-icon" href="/favicon.svg" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <link rel="stylesheet" href="/style.css" />
+  const liElems = items.map((x) => (
+    <li>
+      <a href={x.href}>{x.name}</a>
+    </li>
+  ));
+
+  return html`<!DOCTYPE html>
+  <html lang="ja">
+    <head>
+      ${headTags}
       <script src="/list.mjs" type="module"></script>
-    </>
-  );
-  return (
-    <Layout head={head}>
-      <h1>日本法令引用 URL</h1>
-      <div id="popular">
-        <ul class="inline">
-          {items.map((x) => (
-            <li>
-              <a href={x.href}>{x.name}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <LawList fullList={await lawList()} />
-    </Layout>
-  );
+    </head>
+    <body>
+    <h1>日本法令引用 URL</h1>
+    <div id="popular">
+      <ul class="inline">${liElems}</ul>
+    </div>
+    ${<LawList />}
+  </body>
+  </html>`;
 }
