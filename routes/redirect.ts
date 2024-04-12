@@ -10,6 +10,6 @@ export const redirect = async (c: Context, next: () => Promise<void>) => {
   const hit = (await lawList()).filter((x) => x.LawNo == lawNo);
   if (hit.length === 0) return next();
   const paths = ["", hit[0].LawId];
-  if (path.length > 0) paths.push(path);
+  if (path?.length > 0) paths.push(path);
   return c.redirect(paths.join("/"), 301);
 };
