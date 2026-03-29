@@ -21,5 +21,9 @@
       "net": true,
       "read": [".", "$DENO_DIR"]
     }
+  },
+  "deploy": {
+    "org": "kuboon-tokyo",
+    "app": "elaws"
   }
 }
