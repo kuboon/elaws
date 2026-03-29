@@ -1,12 +1,20 @@
 {
   "tasks": {
-    "serve": "deno run --allow-net --allow-env=DENO_REGISTRY_URL,DENO_DIR,DENO_AUTH_TOKENS --deny-env=XDG_DATA_HOME,HOME,SASS_PATH --allow-read=.,$DENO_DIR main.tsx",
-    "dev": "deno run --allow-net --allow-env=DENO_REGISTRY_URL,DENO_DIR,DENO_AUTH_TOKENS --deny-env=XDG_DATA_HOME,HOME,SASS_PATH --allow-read=.,$DENO_DIR --watch main.tsx"
+    "bundle": "deno bundle lib/client/list.ts --output static/list.mjs && deno bundle lib/client/page.ts --output static/page.js",
+    "serve": "deno run -P main.tsx",
+    "dev": "deno run -P --watch main.tsx"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext", "deno.ns"]
   },
   "imports": {
-    "hono/": "https://deno.land/x/hono@v4.1.5/"
+    "hono/": "jsr:@hono/hono@^4.1.5/"
+  },
+  "permissions": {
+    "default": {
+      "env": ["DENO_REGISTRY_URL", "DENO_DIR", "DENO_AUTH_TOKENS"],
+      "net": true,
+      "read": [".", "$DENO_DIR"]
+    }
   }
 }
