@@ -97,127 +97,127 @@ hr {
   z-index: 99;
 }
 
-law * {
+Law * {
   display: block;
 }
 
-result, appldata > lawnum, toc {
+Result, ApplData > LawNum, Toc {
   display: none;
 }
 
-lawtitle, parttitle, chaptertitle, sectiontitle, articletitle {
+LawTitle, PartTitle, ChapterTitle, SectionTitle, ArticleTitle {
   position: sticky;
   background-color: var(--bg);
 }
 
-law {
+Law {
   --law-title-h: 4.3rem;
   --part-title-height: 0rem;
   --chapter-title-h: 0rem;
   --section-title-h: 0rem;
 }
 
-lawtitle {
+LawTitle {
   font-size: 2.5rem;
   overflow: hidden;
   top: 0;
   z-index: -1;
 }
-lawtitle:hover {
+LawTitle:hover {
   max-height: 100vh !important;
 }
 
-lawtitle:hover ~ lawtitle {
+LawTitle:hover ~ LawTitle {
   visibility: hidden;
 }
 
-enactstatement, mainprovision {
+EnactStatement, MainProvision {
   background-color: var(--bg);
 }
 
-part {
+Part {
   --part-title-height: 3rem;
   background-color: var(--bg);
   border-left: solid 4px hsl(0, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
-parttitle {
+PartTitle {
   z-index: 90;
   top: calc(var(--law-title-h));
   font-size: 2rem;
 }
 
-chapter {
+Chapter {
   --chapter-title-h: 2.2rem;
   background-color: var(--bg);
   border-left: solid 4px hsl(30, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
-chaptertitle {
+ChapterTitle {
   z-index: 80;
   top: calc(var(--law-title-h) + var(--part-title-height));
   font-size: 1.5rem;
 }
 
-section {
+Section {
   --section-title-h: 2rem;
 }
 
-article {
+Article {
   border-left: solid 4px hsl(60, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
-articletitle {
+ArticleTitle {
   z-index: 60;
   top: calc(
     var(--law-title-h) + var(--part-title-height) + var(--chapter-title-h)
   );
 }
 
-paragraph, item, subitem1 {
+Paragraph, Item, Subitem1 {
   flex-wrap: wrap;
   margin-top: 1rem;
 }
-paragraphnum, itemnum, subitem1num {
+ParagraphNum, ItemNum, Subitem1Num {
   display: inline;
 }
-paragraphtitle, itemtitle, subitem1title {
+ParagraphTitle, ItemTitle, Subitem1Title {
   break-after: avoid-column;
   display: inline;
 }
-paragraphsentence, itemsentence, subitem1sentence {
+ParagraphSentence, ItemSentence, Subitem1Sentence {
   break-after: column;
   display: inline;
 }
 
-paragraph {
+Paragraph {
   border-left: solid 4px hsl(90, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
 
-item {
+Item {
   border-left: solid 4px hsl(120, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
 
-subitem1 {
+Subitem1 {
   border-left: solid 4px hsl(150, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
 
-supplprovision {
+SupplProvision {
   background-color: var(--bg);
   border-left: solid 4px hsl(0, 50%, 50%);
   padding-bottom: 1rem;
   padding-left: 6px;
 }
-supplprovision::before {
+SupplProvision::before {
   background-color: var(--bg);
   content: attr(AmendLawNum);
   display: block;
@@ -225,59 +225,59 @@ supplprovision::before {
   top: var(--law-title-h);
   z-index: 4;
 }
-supplprovisionlabel {
+SupplProvisionLabel {
   background-color: var(--bg);
   font-size: 1.5rem;
   position: sticky;
   top: calc(var(--law-title-h) + var(--amend-law-num-h));
   z-index: 3;
 }
-supplprovision articletitle {
+SupplProvision ArticleTitle {
   position: sticky;
   top: calc(var(--law-title-h) + var(--amend-law-num-h) + 2rem);
   z-index: 2;
 }
 
-supplprovision[AmendLawNum] {
+SupplProvision[AmendLawNum] {
   --amend-law-num-h: 1.9rem;
 }
 
-column {
+Column {
   display: block;
 }
 
-sentence {
+Sentence {
   display: inline;
 }
 
-ruby {
+Ruby {
   display: inline;
 }
-ruby rt {
+Ruby Rt {
   display: inline-block;
   font-size: x-small;
   vertical-align: super;
 }
 
-tablestruct {
+TableStruct {
   border-collapse: collapse;
   display: table;
 }
 
-tablerow {
+TableRow {
   display: table-row;
 }
 
-tablecolumn {
+TableColumn {
   border: solid 1px;
   display: table-cell;
   padding: 0.3rem;
 }
 
-stylestruct {
+StyleStruct {
   display: none;
 }
 
-imagedata {
+ImageData {
   display: none;
 }

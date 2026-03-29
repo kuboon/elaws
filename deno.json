@@ -9,7 +9,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@hono/hono/jsx"
   },
-
   "imports": {
     "@hono/hono": "jsr:@hono/hono@^4.12.9",
     "@libs/xml": "jsr:@libs/xml@^7.0.4",
@@ -21,6 +20,9 @@
       "net": true,
       "read": [".", "$DENO_DIR"]
     }
+  },
+  "fmt": {
+    "exclude": ["static/style.css"]
   },
   "deploy": {
     "org": "kuboon-tokyo",
