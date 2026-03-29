@@ -8,7 +8,7 @@
     "lib": ["dom", "dom.iterable", "esnext", "deno.ns"]
   },
   "imports": {
-    "hono/": "https://deno.land/x/hono@v4.1.5/"
+    "hono/": "jsr:@hono/hono@^4.1.5/"
   },
   "permissions": {
     "default": {

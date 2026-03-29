@@ -1,7 +1,13 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@hono/hono@*": "4.12.9",
     "npm:sass@1.72.0": "1.72.0"
+  },
+  "jsr": {
+    "@hono/hono@4.12.9": {
+      "integrity": "53c2b0a721c1d782e6a347ad5bf15a3235ff624b98859c21f779b7ee2f5e040e"
+    }
   },
   "npm": {
     "anymatch@3.1.3": {
@@ -271,5 +277,10 @@
     "https://esm.sh/fast-xml-parser@4.0.7?no-check": "b4d117c2692f7cc494b6dccd19742d75bd6ff00e77b0a31838eb5d81216a1776",
     "https://esm.sh/strnum@1.1.2/denonext/strnum.mjs": "ceed7a7d507d6ae079c6668a59ab5bd43a6b6263fdad2cc17485c9595eb2982e",
     "https://esm.sh/strnum@1.1.2?target=denonext": "05bead2d260b4083c0e46b24f9334e059de57e037d93ac82eabe5d6e813c026c"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@hono/hono@^4.1.5"
+    ]
   }
 }
