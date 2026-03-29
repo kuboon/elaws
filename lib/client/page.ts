@@ -2,8 +2,8 @@ import { elemToPath, pathToSelector } from "../path.ts";
 
 const containerElems = ["PartTitle", "ChapterTitle", "SectionTitle"];
 
-let share: HTMLElement
-document.addEventListener("DOMContentLoaded", ()=> {
+let share: HTMLElement;
+document.addEventListener("DOMContentLoaded", () => {
   share = document.getElementById("share")!;
   prepareXml().then(selectByPath)
     .then(ensureLawTitle).then(observeSticky);
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
       });
     });
   }
-})
+});
 
 type ObserveStickyParams = { stickyElem: HTMLElement; lineHeight: number };
 async function ensureLawTitle(): Promise<ObserveStickyParams> {

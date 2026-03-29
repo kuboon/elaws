@@ -1,9 +1,5 @@
-/** @jsx jsx */
-/** @jsxFrag Fragment */
 import { lawList } from "./lawList.ts";
 import { LawItem } from "../types.ts";
-
-import { Fragment, jsx } from "hono/middleware.ts";
 
 const LongList = ({ list }: { list: LawItem[] }) => {
   const groups: Record<string, LawItem[]> = {};

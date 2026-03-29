@@ -1,18 +1,14 @@
-/** @jsx jsx */
-/** @jsxFrag Fragment */
-
 import LawList from "../lib/server/LawList.tsx";
-import { Fragment, jsx } from "hono/middleware.ts";
-import { html } from "hono/helper.ts";
 import { head } from "../lib/server/htmlHead.ts";
 
+import { html } from "@hono/hono/html";
+
 export function Index() {
-  const mrkdwn = "# 日本法令引用URL\nスマホでスイスイ かんたんシェア"
+  const mrkdwn = "# 日本法令引用URL\nスマホでスイスイ かんたんシェア";
   const headTags = head({
     description: "スマホでスイスイ かんたんシェア",
     url: "https://elaws.kbn.one",
-    image:
-      `https://og.kbn.one/${encodeURIComponent(mrkdwn)}.png?md=1`,
+    image: `https://og.kbn.one/${encodeURIComponent(mrkdwn)}.png?md=1`,
   });
   const items = [
     { href: "321CONSTITUTION", name: "憲法" },
@@ -28,18 +24,20 @@ export function Index() {
     </li>
   ));
 
-  return html`<!DOCTYPE html>
-  <html lang="ja">
-    <head>
-      ${headTags}
-      <script src="/list.mjs" type="module"></script>
-    </head>
-    <body>
-    <h1>日本法令引用 URL</h1>
-    <div id="popular">
-      <ul class="inline">${liElems}</ul>
-    </div>
-    ${<LawList />}
-  </body>
-  </html>`;
+  return html`
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        ${headTags}
+        <script src="/list.mjs" type="module"></script>
+      </head>
+      <body>
+        <h1>日本法令引用 URL</h1>
+        <div id="popular">
+          <ul class="inline">${liElems}</ul>
+        </div>
+        ${<LawList />}
+      </body>
+    </html>
+  `;
 }

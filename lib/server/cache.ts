@@ -1,5 +1,5 @@
-import { create, type LRU } from "https://deno.land/x/dcache@v0.0.1/mod.ts";
-const lru: LRU<string, string> = create(10);
+import { LruCache } from "@std/cache";
+const lru = new LruCache<string, string>(10);
 
 export async function cachedFetch(url: string) {
   const cached = lru.get(url);
@@ -7,6 +7,6 @@ export async function cachedFetch(url: string) {
   const xml = await fetch(url).then((x) => x.text());
   const val = xml.slice(`<?xml version="1.0" encoding="UTF-8"?>`.length);
   lru.set(url, val);
-  console.log(Deno.memoryUsage())
+  console.log(Deno.memoryUsage());
   return val;
 }

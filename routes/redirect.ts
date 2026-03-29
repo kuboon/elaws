@@ -1,8 +1,5 @@
-/** @jsx jsx */
-/** @jsxFrag Fragment */
-
 import { lawList } from "../lib/server/lawList.ts";
-import { type Context } from "hono/mod.ts";
+import { type Context } from "@hono/hono";
 
 export const redirect = async (c: Context, next: () => Promise<void>) => {
   const params = c.req.param();

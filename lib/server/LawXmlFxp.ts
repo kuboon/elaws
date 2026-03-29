@@ -29,7 +29,7 @@ function walk(
       const ret = walk(j as JSONValue, q, all);
       if (ret && !all) return ret;
     }
-  } else if (typeof json === "object") {
+  } else if (json && typeof json === "object") {
     for (const [key, val] of Object.entries(json)) {
       if (key === q.name) {
         if (!q.key) {
@@ -53,7 +53,7 @@ export default class LawXml {
   public dom: JSONValue;
   constructor(public readonly xml: string) {
     try {
-      this.dom = xmlParser.parse(xml)[0].DataRoot;
+      this.dom = xmlParser.parse(xml).DataRoot;
     } catch (e) {
       console.error(xml.slice(0, 1000));
       throw e;

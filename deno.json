@@ -1,14 +1,19 @@
 {
   "tasks": {
-    "bundle": "deno bundle lib/client/list.ts --output static/list.mjs && deno bundle lib/client/page.ts --output static/page.js",
+    "build": "deno bundle lib/client/list.ts --output static/list.mjs && deno bundle lib/client/page.ts --output static/page.js",
     "serve": "deno run -P main.tsx",
     "dev": "deno run -P --watch main.tsx"
   },
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext", "deno.ns"]
+    "lib": ["dom", "dom.iterable", "esnext", "deno.ns"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@hono/hono/jsx"
   },
+
   "imports": {
-    "hono/": "jsr:@hono/hono@^4.1.5/"
+    "@hono/hono": "jsr:@hono/hono@^4.12.9",
+    "@libs/xml": "jsr:@libs/xml@^7.0.4",
+    "@std/cache": "jsr:@std/cache@^0.2.2"
   },
   "permissions": {
     "default": {

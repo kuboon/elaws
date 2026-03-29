@@ -1,0 +1,283 @@
+:root {
+  --color: black;
+  --bg: white;
+  --bg-selected: #fcc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color: white;
+    --bg: black;
+    --bg-selected: #933;
+  }
+  :root a {
+    color: #bbf;
+  }
+}
+
+@supports (font: -apple-system-body) {
+  html {
+    font: -apple-system-body;
+  }
+}
+@font-face {
+  font-family: UDPGothic;
+  src:
+    local("BIZ UDPGothic"),
+    url("/BIZUDPGothic-Regular.ttf") format("truetype");
+}
+html {
+  font-family: UDPGothic;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 10px;
+  color: var(--color);
+  background-color: var(--bg);
+}
+
+#title a {
+  text-decoration: none;
+  color: var(--color);
+}
+
+ul.inline {
+  padding: 0;
+}
+ul.inline li {
+  display: inline-block;
+  padding: 0 0.25rem;
+  border-right: solid 1px;
+}
+ul.inline li:first-child {
+  border-left: solid 1px;
+}
+
+.hidden {
+  display: none;
+}
+
+.collapse::after {
+  content: " [+]";
+}
+.collapse ~ * {
+  display: none;
+}
+
+.selected {
+  background-color: var(--bg-selected);
+  position: relative;
+}
+.selected * {
+  background-color: inherit;
+}
+
+#share {
+  position: absolute;
+  z-index: 100;
+  height: 1.5rem;
+  top: -1.5rem;
+  right: 0;
+}
+#share svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: pink;
+  opacity: 0.5;
+}
+
+hr {
+  background-color: var(--bg);
+  border: dotted var(--color);
+  border-width: 3px 0 0 0;
+  margin: 0;
+  padding-block: 3px;
+  position: sticky;
+  z-index: 99;
+}
+
+law * {
+  display: block;
+}
+
+result, appldata > lawnum, toc {
+  display: none;
+}
+
+lawtitle, parttitle, chaptertitle, sectiontitle, articletitle {
+  position: sticky;
+  background-color: var(--bg);
+}
+
+law {
+  --law-title-h: 4.3rem;
+  --part-title-height: 0rem;
+  --chapter-title-h: 0rem;
+  --section-title-h: 0rem;
+}
+
+lawtitle {
+  font-size: 2.5rem;
+  overflow: hidden;
+  top: 0;
+  z-index: -1;
+}
+lawtitle:hover {
+  max-height: 100vh !important;
+}
+
+lawtitle:hover ~ lawtitle {
+  visibility: hidden;
+}
+
+enactstatement, mainprovision {
+  background-color: var(--bg);
+}
+
+part {
+  --part-title-height: 3rem;
+  background-color: var(--bg);
+  border-left: solid 4px hsl(0, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+parttitle {
+  z-index: 90;
+  top: calc(var(--law-title-h));
+  font-size: 2rem;
+}
+
+chapter {
+  --chapter-title-h: 2.2rem;
+  background-color: var(--bg);
+  border-left: solid 4px hsl(30, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+chaptertitle {
+  z-index: 80;
+  top: calc(var(--law-title-h) + var(--part-title-height));
+  font-size: 1.5rem;
+}
+
+section {
+  --section-title-h: 2rem;
+}
+
+article {
+  border-left: solid 4px hsl(60, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+articletitle {
+  z-index: 60;
+  top: calc(
+    var(--law-title-h) + var(--part-title-height) + var(--chapter-title-h)
+  );
+}
+
+paragraph, item, subitem1 {
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+paragraphnum, itemnum, subitem1num {
+  display: inline;
+}
+paragraphtitle, itemtitle, subitem1title {
+  break-after: avoid-column;
+  display: inline;
+}
+paragraphsentence, itemsentence, subitem1sentence {
+  break-after: column;
+  display: inline;
+}
+
+paragraph {
+  border-left: solid 4px hsl(90, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+
+item {
+  border-left: solid 4px hsl(120, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+
+subitem1 {
+  border-left: solid 4px hsl(150, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+
+supplprovision {
+  background-color: var(--bg);
+  border-left: solid 4px hsl(0, 50%, 50%);
+  padding-bottom: 1rem;
+  padding-left: 6px;
+}
+supplprovision::before {
+  background-color: var(--bg);
+  content: attr(AmendLawNum);
+  display: block;
+  position: sticky;
+  top: var(--law-title-h);
+  z-index: 4;
+}
+supplprovisionlabel {
+  background-color: var(--bg);
+  font-size: 1.5rem;
+  position: sticky;
+  top: calc(var(--law-title-h) + var(--amend-law-num-h));
+  z-index: 3;
+}
+supplprovision articletitle {
+  position: sticky;
+  top: calc(var(--law-title-h) + var(--amend-law-num-h) + 2rem);
+  z-index: 2;
+}
+
+supplprovision[AmendLawNum] {
+  --amend-law-num-h: 1.9rem;
+}
+
+column {
+  display: block;
+}
+
+sentence {
+  display: inline;
+}
+
+ruby {
+  display: inline;
+}
+ruby rt {
+  display: inline-block;
+  font-size: x-small;
+  vertical-align: super;
+}
+
+tablestruct {
+  border-collapse: collapse;
+  display: table;
+}
+
+tablerow {
+  display: table-row;
+}
+
+tablecolumn {
+  border: solid 1px;
+  display: table-cell;
+  padding: 0.3rem;
+}
+
+stylestruct {
+  display: none;
+}
+
+imagedata {
+  display: none;
+}

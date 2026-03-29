@@ -8,20 +8,13 @@ export async function lawList() {
       (x) => x.text(),
     );
     const parsed = xmlParser.parse(xml);
-    if (!parsed[1]) {
+    if (!parsed) {
       console.error(xml.slice(0, 1000));
       throw new Error("Failed to parse law list");
     }
-    cached = parsed[1].DataRoot[1].ApplData.map((x: any) => {
-      const info = x.LawNameListInfo;
-      if (!info) return;
-      return {
-        LawId: info[0].LawId[0]["#text"],
-        LawName: info[1].LawName[0]["#text"],
-        LawNo: info[2].LawNo[0]["#text"],
-        PromulgationDate: info[3].PromulgationDate[0]?.["#text"] || "",
-      };
-    }).filter((x: unknown) => x) as LawItem[];
+    cached = parsed.DataRoot.ApplData.LawNameListInfo.filter((x: unknown) =>
+      x
+    ) as LawItem[];
   }
   return cached;
 }

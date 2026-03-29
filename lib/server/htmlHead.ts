@@ -1,4 +1,4 @@
-import { html } from "hono/helper.ts";
+import { html } from "@hono/hono/html";
 
 export type Metas = {
   title?: string;
@@ -7,8 +7,8 @@ export type Metas = {
   image: string;
 };
 export function head(metas: Metas) {
-  const site_name = "日本法令引用 URL"
-  const title = metas.title ? `${metas.title} - ${site_name}` : site_name
+  const site_name = "日本法令引用 URL";
+  const title = metas.title ? `${metas.title} - ${site_name}` : site_name;
   return html`
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/style.css" />
@@ -27,5 +27,6 @@ export function head(metas: Metas) {
     <meta name="twitter:image" content="${metas.image}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="mask-icon" href="/favicon.svg" color="pink" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />`;
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  `;
 }
