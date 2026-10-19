@@ -19,14 +19,8 @@
     font: -apple-system-body;
   }
 }
-@font-face {
-  font-family: UDPGothic;
-  src:
-    local("BIZ UDPGothic"),
-    url("/BIZUDPGothic-Regular.ttf") format("truetype");
-}
 html {
-  font-family: UDPGothic;
+  font-family: "BIZ UDPGothic", sans-serif;
 }
 
 body {

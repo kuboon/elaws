@@ -11,6 +11,12 @@ export function head(metas: Metas) {
   const title = metas.title ? `${metas.title} - ${site_name}` : site_name;
   return html`
     <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&amp;display=swap"
+    />
     <link rel="stylesheet" href="/style.css" />
     <title>${title}</title>
     <meta property="og:type" content="website" />
