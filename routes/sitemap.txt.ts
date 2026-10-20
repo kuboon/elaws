@@ -7,7 +7,7 @@ export const sitemap = async () => {
   return new Response(text, {
     headers: {
       "content-type": "text/plain",
-      "Cache-Control": "s-maxage=3, stale-while-revalidate",
+      "Cache-Control": "public, max-age=86400, stale-while-revalidate=86400",
     },
   });
 };

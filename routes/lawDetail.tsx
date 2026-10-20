@@ -3,7 +3,7 @@ import LawXml from "../lib/server/LawXmlFxp.ts";
 import { head } from "../lib/server/htmlHead.ts";
 
 import { type Context } from "@hono/hono";
-import { html, raw } from "@hono/hono/html";
+import { html } from "@hono/hono/html";
 
 const baseUrl = "https://elaws.kbn.one";
 function articleNum(path: string) {
@@ -22,8 +22,7 @@ function articleNum(path: string) {
 type PageData = {
   url: string;
   source: string;
-  xml?: string;
-  xmlUrl?: string;
+  xmlUrl: string;
   title: string;
   description?: string;
 };
@@ -32,19 +31,19 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   const params = c.req.param();
   const { lawId, path } = params;
   if (!lawId) return next();
-  const apiUrl = "https://elaws.e-gov.go.jp/api/1/lawdata/" + lawId;
+  const apiUrl = "https://laws.e-gov.go.jp/api/1/lawdata/" + lawId;
   const xml = await cachedFetch(apiUrl);
   const lawXml = new LawXml(xml);
   if (!lawXml.isOk()) return next();
 
   const title = lawXml.title() || "";
-  const source = "https://elaws.e-gov.go.jp/document?lawid=" + lawId;
+  const source = "https://laws.e-gov.go.jp/law/" + lawId;
   if (!path || path === "") {
     const description = lawXml.rootDescription();
     return render(c, {
       url: `${baseUrl}/${lawId}`,
       source,
-      xml,
+      xmlUrl: apiUrl,
       title,
       description,
     });
@@ -82,7 +81,8 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
 function render(c: Context, data: PageData) {
   const headers = {
     "Content-Type": "application/xhtml+xml;charset=UTF-8",
-    "Cache-Control": "s-maxage=3600, stale-while-revalidate",
+    "Cache-Control":
+      "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
   };
   return c.html(Page(data), 200, headers);
 }
@@ -109,7 +109,7 @@ function Page(data: PageData) {
           <a id="source" href="${data.source}">原本へのリンク</a>
         </header>
         ${/*Law.OriginalPromulgateDate などなど*/ null}
-        <xml id="xml" data-xmlurl="${data.xmlUrl}">${raw(data.xml || "")}</xml>
+        <xml id="xml" data-xmlurl="${data.xmlUrl}"></xml>
         <div id="share" style="display: none;">
           <svg
             fill="#000000"

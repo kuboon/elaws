@@ -19,14 +19,13 @@
     font: -apple-system-body;
   }
 }
-@font-face {
-  font-family: UDPGothic;
-  src:
-    local("BIZ UDPGothic"),
-    url("/BIZUDPGothic-Regular.ttf") format("truetype");
-}
-html {
-  font-family: UDPGothic;
+body {
+  font-family: "Helvetica Neue",
+    Arial,
+    "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans",
+    "Noto Sans JP",
+    sans-serif;
 }
 
 body {
