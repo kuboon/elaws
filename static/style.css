@@ -100,7 +100,7 @@ Law * {
   display: block;
 }
 
-Result, ApplData > LawNum, Toc {
+Result, ApplData > LawNum, TOC {
   display: none;
 }
 
