@@ -26,6 +26,7 @@ app.get("/robots.txt", staticFile("static/robots.txt"));
 app.get("/sitemap.txt", routes.sitemap);
 
 app.get("/page.js", staticFile("static/page.js"));
+app.get("/embed/:lawId{[0-9]{3}[0-9A-Z]{12}}/:path?", routes.embed);
 app.get("/:lawId{[0-9]{3}[0-9A-Z]{12}}/:path?", routes.lawDetail);
 app.get("/:lawNo/:path?", routes.redirect);
 
