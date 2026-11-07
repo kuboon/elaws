@@ -5,8 +5,8 @@ import { head } from "../lib/server/htmlHead.ts";
 import { type Context } from "@hono/hono";
 import { html } from "@hono/hono/html";
 
-const baseUrl = "https://elaws.kbn.one";
-function articleNum(path: string) {
+export const baseUrl = "https://elaws.kbn.one";
+export function articleNum(path: string) {
   const a = path.split("-");
   // const kanji = "〇一二三四五六七八九"
   const fusoku = a[0] === "s" ? `附則(${decodeURIComponent(a[1])}) ` : null;
@@ -21,6 +21,7 @@ function articleNum(path: string) {
 
 type PageData = {
   url: string;
+  player: string;
   source: string;
   xmlUrl: string;
   title: string;
@@ -42,6 +43,7 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
     const description = lawXml.rootDescription();
     return render(c, {
       url: `${baseUrl}/${lawId}`,
+      player: `${baseUrl}/embed/${lawId}`,
       source,
       xmlUrl: apiUrl,
       title,
@@ -52,6 +54,7 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   if (description) {
     return render(c, {
       url: `${baseUrl}/${lawId}/${path}`,
+      player: `${baseUrl}/embed/${lawId}/${path}`,
       source,
       xmlUrl: apiUrl,
       title: title + articleNum(path),
@@ -92,6 +95,7 @@ function Page(data: PageData) {
     title: data.title,
     description: data.description!,
     url: data.url,
+    player: data.player,
     image: `https://og.kbn.one/${encodeURIComponent(mrkdwn)}.png?md=1`,
   });
   // deno-fmt-ignore

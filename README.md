@@ -7,6 +7,9 @@
 
 各条文をタップすると条文へのパーマリンクを取得でき、容易にSNS等へシェアすることが可能です。
 
+X (Twitter) にリンクを投稿すると Player Card として条文がポスト内に表示されます
+(`/embed/:lawId/:path` がカード内 iframe 用のページ)。
+
 [hono](https://hono.dev) で実装されており、 https://deno.com/deploy
 で動作します。
 
