@@ -1,5 +1,4 @@
-import { cachedFetch } from "../lib/server/cache.ts";
-import LawXml from "../lib/server/LawXmlFxp.ts";
+import { loadLaw } from "../lib/server/egov.ts";
 import { articleNum, baseUrl } from "./lawDetail.tsx";
 
 import { type Context } from "@hono/hono";
@@ -15,9 +14,8 @@ const frameAncestors =
 export const embed = async (c: Context, next: () => Promise<void>) => {
   const { lawId, path } = c.req.param();
   if (!lawId) return next();
-  const apiUrl = "https://laws.e-gov.go.jp/api/1/lawdata/" + lawId;
-  const lawXml = new LawXml(await cachedFetch(apiUrl));
-  if (!lawXml.isOk()) return next();
+  const lawXml = await loadLaw(lawId, path);
+  if (!lawXml) return next();
 
   const lawTitle = lawXml.title() || "";
   const lines = path ? lawXml.getLinesFrom(path) : [lawXml.rootDescription()];

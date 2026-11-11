@@ -17,7 +17,7 @@ app.get("/", (c) => {
     "Cache-Control",
     "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
   );
-  return c.html(<routes.Index />);
+  return c.html(routes.indexHtml());
 });
 app.get("/style.css", staticFile("static/style.css"));
 app.get("/list.mjs", staticFile("static/list.mjs"));

@@ -1,5 +1,4 @@
-import { cachedFetch } from "../lib/server/cache.ts";
-import LawXml from "../lib/server/LawXmlFxp.ts";
+import { lawDataUrl, loadLaw } from "../lib/server/egov.ts";
 import { head } from "../lib/server/htmlHead.ts";
 
 import { type Context } from "@hono/hono";
@@ -32,10 +31,9 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
   const params = c.req.param();
   const { lawId, path } = params;
   if (!lawId) return next();
-  const apiUrl = "https://laws.e-gov.go.jp/api/1/lawdata/" + lawId;
-  const xml = await cachedFetch(apiUrl);
-  const lawXml = new LawXml(xml);
-  if (!lawXml.isOk()) return next();
+  const apiUrl = lawDataUrl(lawId);
+  const lawXml = await loadLaw(lawId, path);
+  if (!lawXml) return path ? notFound(c, lawId, path) : next();
 
   const title = lawXml.title() || "";
   const source = "https://laws.e-gov.go.jp/law/" + lawId;
@@ -62,7 +60,10 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
     });
   }
 
-  // render 404
+  return notFound(c, lawId, path);
+};
+
+function notFound(c: Context, lawId: string, path: string) {
   const a = path.split("-");
   const list = a.map((_, i) => {
     const href = `/${lawId}/${a.slice(0, i).join("-")}`;
@@ -79,7 +80,7 @@ export const lawDetail = async (c: Context, next: () => Promise<void>) => {
     </>,
     { status: 404 },
   );
-};
+}
 
 function render(c: Context, data: PageData) {
   const headers = {

@@ -90,9 +90,9 @@ function find(json: JSONValue, q: DomQuery): JSONValue | undefined {
 }
 export default class LawXml {
   public dom: JSONValue;
-  constructor(public readonly xml: string) {
+  constructor(public readonly xml: string, root = "DataRoot") {
     try {
-      this.dom = (xmlParser.parse(xml) as JSONObject).DataRoot;
+      this.dom = (xmlParser.parse(xml) as JSONObject)[root];
     } catch (e) {
       console.error(xml.slice(0, 1000));
       throw e;
@@ -120,7 +120,8 @@ export default class LawXml {
     return this.querySelector([{ name: "Result" }, { name: "Code" }]) === "0";
   }
   title() {
-    const t = this.querySelector([{ name: "LawTitle" }]);
+    const t = this.querySelector([{ name: "LawTitle" }]) ||
+      this.querySelector([{ name: "law_title" }]);
     return t && getSentence(t);
   }
   rootDescription() {
@@ -130,13 +131,16 @@ export default class LawXml {
     return preamble ? getSentence(preamble) : "";
   }
   getSentenceFrom(path: string) {
+    if (path === "0") return this.querySelector([{ name: "Preamble" }]);
     const selector = pathToArray(path);
     const target = this.querySelector(selector);
     return target && getSentence(target);
   }
   /** getSentenceFrom と同じ箇所を、条・項・号ごとの行に分けて返す */
   getLinesFrom(path: string) {
-    const target = this.find(pathToArray(path));
+    const target = this.find(
+      path === "0" ? [{ name: "Preamble" }] : pathToArray(path),
+    );
     return target === undefined ? undefined : getLines(target);
   }
 }
