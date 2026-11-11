@@ -41,3 +41,13 @@ export function Index() {
     </html>
   `;
 }
+
+// トップページは法令一覧 (約 1MB) を含むので、isolate ごとに一度だけ描画する
+let cachedIndex: Promise<string> | undefined;
+export function indexHtml() {
+  cachedIndex ??= Promise.resolve(Index()).then(String).catch((e) => {
+    cachedIndex = undefined;
+    throw e;
+  });
+  return cachedIndex;
+}

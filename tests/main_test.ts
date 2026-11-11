@@ -34,3 +34,14 @@ Deno.test("LawXml", () => {
     "２ 第二項。",
   ]);
 });
+
+Deno.test("pathToElm", async () => {
+  const { pathToElm } = await import("../lib/server/egov.ts");
+  assertEquals(pathToElm("1"), "MainProvision-Article_1");
+  assertEquals(pathToElm("3_2-1"), "MainProvision-Article_3_2");
+  assertEquals(pathToElm("13-1-3"), "MainProvision-Article_13");
+  assertEquals(pathToElm("0"), "Preamble");
+  assertEquals(pathToElm("s-0-1"), undefined);
+  assertEquals(pathToElm("0-1"), undefined);
+  assertEquals(pathToElm("../x"), undefined);
+});
